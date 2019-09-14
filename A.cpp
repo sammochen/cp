@@ -20,25 +20,7 @@ typedef vector<ll> VLL;
 
 namespace SOLVE {
 	void main() {
-		VLL four(4);
-		
-		four[0] = 4;
-		four[1] = 9;
-		four[2] = 6;
-		four[3] = 15;
-		
-		ll q;
-		cin >> q;
-		REP(i,0,q) {
-			ll x;
-			cin >> x;
-			if (x >= four[x%4]) {
-				cout << (x - four[x%4]) / 4 + 1 << endl;
-			} else {
-				cout << -1 << endl;
-			}
-		}
-			
+
 	}
 }
 

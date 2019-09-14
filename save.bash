@@ -17,4 +17,3 @@ git add .
 git commit -m "$(echo $message)"
 git push
 
-nautilus ~/problem-solving
