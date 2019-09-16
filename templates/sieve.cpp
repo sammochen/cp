@@ -45,7 +45,7 @@ namespace SOLVE {
 				continue;
 			}
 			
-			for (ll f = 2; x * f < nax; f++) {
+			for (ll f = 2; x * f < nax * nax; f++) {
 				p[x*f] = 0;
 			}
 		}

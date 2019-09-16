@@ -33,7 +33,56 @@ typedef double db;
 typedef vector<ll> VLL;
 
 namespace SOLVE {
+	ll nax = 400;
+	
+	VLL fill(string s) {
+		VLL A(nax);
+		s = string(nax - s.size(), '0') + s;
+		
+		REP(i,0,nax) {
+			A[i] = s[i] - '0';
+		}
+		return A;
+	}
+	
+	VLL add(VLL a, VLL b) {
+		VLL c(nax);
+		ll carry = 0;
+		
+		RREP(i,nax-1,0) {
+			ll x = a[i] + b[i] + carry;
+			carry = 0;
+			
+			if (x >= 10) {
+				carry = 1;
+				x -= 10;
+			}
+			
+			c[i] = x;
+		}
+		if (carry) cout << "overflow!" << endl;
+		return c;
+	}
+	
+	VLL times(VLL a, ll k) {
+		VLL c(nax);
+		REP(i,0,k) {
+			c = add(a, c);
+		}
+		return c;
+	}
+	
+	VLL power(ll a, ll k) {
+		VLL c(nax);
+		c[nax-1] = 1;
+		REP(i,0,k) {
+			c = times(c, a);
+		}
+		return c;
+	}
+	 
 	void main() {
+		
 		
 	}
 }
