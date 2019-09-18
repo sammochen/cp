@@ -16,7 +16,6 @@ using namespace std;
 
 string to_string(string s) {return s;}
 string to_string(char c) {return "" + c;}
-string to_string(bool b) {return b ? "true" : "false";}
 template <typename A> string to_string(vector<A> v) { string s = "("; int first = 1; for (A a : v) { if (!first) { s += ", "; } first = 0; s += to_string(a); } s += ")"; return s; }
 
 void debug_out() {cerr << endl;}
@@ -31,8 +30,9 @@ template <typename Head, typename... Tail> void debug_out(Head H, Tail... T) { c
 typedef  long long ll;
 typedef double db;
 typedef vector<ll> VLL;
+typedef vector<VLL> VVLL;
 
-namespace SOLVE {
+namespace SOLVE {	
 	void main() {
 		
 	}

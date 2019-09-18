@@ -1,3 +1,5 @@
+#!/bin/bash
+
 n=$(ls ./.in | wc -w)
 
 n=$(($n + 1))

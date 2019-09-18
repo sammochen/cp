@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 if [ $# -le 1 ] ; then
 	echo "not enough"
@@ -18,7 +18,7 @@ cp A.cpp ~/problem-solving/$folder/$2.cpp
 
 echo "saved" $2
 
-message=$(echo update $(date +"%d-%m-%y"))
+message=$(echo added $2)
 echo $message
 
 cd ~/problem-solving

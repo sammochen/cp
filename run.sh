@@ -1,4 +1,11 @@
+#!/bin/bash
+
 g++ A.cpp
+
+if [[ $(echo ./.in/*) == ./.in/* ]] ; then
+	echo made empty
+	>./.in/blank
+fi
 
 for file in ./.in/*; do
 	if [ $# -ne 0 ] ; then
@@ -9,3 +16,5 @@ for file in ./.in/*; do
 	echo --output--
 	./a.out < "$file"
 done
+
+rm ./.in/blank
