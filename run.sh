@@ -8,7 +8,7 @@ fi
 
 empty=0
 
-if [[ $(echo ./.in/*) == './.in/*' ]] ; then
+if [[ ! -e ./.in/in1 ]] ; then
 	echo made empty
 	>./.in/blank
 	empty=1
@@ -20,11 +20,11 @@ for file in ./.in/*; do
 		cat $file
 	fi
 	
-	echo --output--
+	echo --output $file --
 	./a.out < "$file"
 done
 
-if [[ empty == 1 ]] ; then
+if [[ -e ./in/blank ]] ; then
 	rm ./.in/blank
 fi
 
