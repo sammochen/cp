@@ -13,6 +13,7 @@ using namespace std;
 
 #define PII pair<int,int>
 #define PLL pair<ll,ll>
+#define MP make_pair
 
 string to_string(string s) {return s;}
 string to_string(char c) {return "" + c;}

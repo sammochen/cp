@@ -13,16 +13,17 @@ using namespace std;
 
 #define PII pair<int,int>
 #define PLL pair<ll,ll>
+#define MP make_pair
 
-string to_string() {return "";}
 string to_string(string s) {return s;}
 string to_string(char c) {return "" + c;}
-string to_string(bool b) {return b ? "true" : "false";}
-template <typename A> string to_string(A v) { string s = "("; int first = 1; for (auto a : v) { if (!first) { s += ", "; } first = 0; s += to_string(a); } s += ")"; return s; }
-template <typename Head, typename... Tail> string to_string(Head H, Tail... T) { to_string(H) + " " + to_string(T...); }
+template <typename A> string to_string(vector<A> v) { string s = "("; int first = 1; for (A a : v) { if (!first) { s += ", "; } first = 0; s += to_string(a); } s += ")"; return s; }
+
+void debug_out() {cerr << endl;}
+template <typename Head, typename... Tail> void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...); }
 
 #ifndef ONLINE_JUDGE
-#define debug(...) do { cerr << "[" << #__VA_ARGS__ << "]: " + to_string(__VA_ARGS__) << endl; } while (false)
+#define debug(...) do { cerr << "[" << #__VA_ARGS__ << "]:", debug_out(__VA_ARGS__); } while (false)
 #else
 #define debug(...) do { } while (false)
 #endif
@@ -30,9 +31,10 @@ template <typename Head, typename... Tail> string to_string(Head H, Tail... T) {
 typedef  long long ll;
 typedef double db;
 typedef vector<ll> VLL;
+typedef vector<VLL> VVLL;
 
 namespace SOLVE {
-	ll nax = 32;
+	ll nax = 300; // length of number
 	
 	void proper(VLL & a) {
 		REP(i,0,nax) {
@@ -58,6 +60,16 @@ namespace SOLVE {
 		return ans;
 	}
 	
+	// can only divide by ll for now
+	VLL operator/(VLL A, ll b) {
+		VLL C(nax);
+		RREP(i,nax-1,0) {
+			if (i != 0) A[i-1] += A[i] % b * 10;
+			A[i] /= b;
+		}
+		return A;
+	}
+	
 	// O(n)
 	VLL operator+(VLL A, VLL B) {
 		VLL C(nax);
@@ -70,17 +82,17 @@ namespace SOLVE {
 	VLL operator*(VLL A, VLL B) {
 		ll b = from(B);
 		if (b == 0) return to(0);
-		VLL C = A * to(b/2);
+		VLL C = A * (B/2);
 		C = C+C;
 		C = b%2 ? C+A : C;
 		return C;
-	}
+	}	
 	
 	// O(nlogk)
 	VLL operator^(VLL A, VLL K) {
 		ll k = from(K);
 		if (k == 0) return to(1);
-		VLL C = A ^ to(k/2);
+		VLL C = A ^ (K/2);
 		C = C*C;
 		C = k%2 ? C*A : C;
 		return C;

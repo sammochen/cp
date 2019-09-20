@@ -2,9 +2,16 @@
 
 g++ A.cpp
 
-if [[ $(echo ./.in/*) == ./.in/* ]] ; then
+if [[ $? -ne 0 ]] ; then
+	exit 1
+fi
+
+empty=0
+
+if [[ $(echo ./.in/*) == './.in/*' ]] ; then
 	echo made empty
 	>./.in/blank
+	empty=1
 fi
 
 for file in ./.in/*; do
@@ -17,4 +24,7 @@ for file in ./.in/*; do
 	./a.out < "$file"
 done
 
-rm ./.in/blank
+if [[ empty == 1 ]] ; then
+	rm ./.in/blank
+fi
+
