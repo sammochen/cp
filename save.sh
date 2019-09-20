@@ -7,16 +7,13 @@ fi
 
 if [ $1 == "cf" ] ; then
 	folder="codeforces"
-fi
-
-if [ $1 == pe ] ; then
+elif [ $1 == pe ] ; then
 	folder="projecteuler"
+else 
+	echo "not recognised"
 fi
-
 
 cp A.cpp ~/problem-solving/$folder/$2.cpp
-
-echo "saved" $2
 
 message=$(echo added $2)
 echo $message

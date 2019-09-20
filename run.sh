@@ -28,3 +28,4 @@ if [[ -e ./in/blank ]] ; then
 	rm ./.in/blank
 fi
 
+rm a.out
