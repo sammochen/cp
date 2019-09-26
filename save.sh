@@ -5,10 +5,12 @@ if [ $# -le 1 ] ; then
 	exit 1
 fi
 
-if [ $1 == "cf" ] ; then
+if [ $1 == cf ] ; then
 	folder="codeforces"
 elif [ $1 == pe ] ; then
 	folder="projecteuler"
+elif [ $1 == ca ] ; then
+	folder="csacademy"
 else 
 	echo "not recognised"
 fi

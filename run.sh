@@ -1,6 +1,6 @@
 #!/bin/bash
 
-g++ A.cpp
+g++ -std=c++17 A.cpp
 
 if [[ $? -ne 0 ]] ; then
 	exit 1

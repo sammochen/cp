@@ -33,24 +33,50 @@ typedef double db;
 typedef vector<ll> VLL;
 typedef vector<VLL> VVLL;
 
+const ll inf = 1e9 + 7;
+
 namespace SOLVE {	
+	// just bigger
+	ll bs(VLL &A, ll k) {
+		ll L = 0, R = A.size() - 1;
+		while (L < R) {
+			ll M = (L+R)/2;
+			if (A[M] > k) R = M;
+			else L = M+1;
+		}
+		return L;
+	}
+			
+			
 	void main() {
-		ll n;
-		cin >> n;
-		VLL A(n);
-		REP(i,0,n) cin >> A[i];
-		sort(A.rbegin(), A.rend());
 		
-		VLL dp(n, 1); // dp[i] is best ending at number
+		
+		ll n, x;
+		cin >> n;
+		
+		VLL endno(n+1, inf);
+		endno[0] = -1;
+		ll ans = 0;
+		
 		REP(i,0,n) {
-			REP(j,0,i) {
-				if (A[j] % A[i] == 0) dp[i] = max(dp[i], dp[j] + 1);
+			cin >> x;
+			
+			if (x <= endno[1]) {
+				endno[1] = x;
+			} else {
+	
+				// find element that is just smaller
+				ll j = bs(endno, x);
+				endno[j] = x;
+				ans = max(ans, j);
 			}
 		}
 		
-		ll ans = 0;
-		REP(i,0,n) ans = max(ans, dp[i]);
 		cout << ans << endl;
+		
+		
+			
+			
 	}
 }
 
