@@ -12,9 +12,6 @@ fi
 
 cp ./templates/$1.cpp A.cpp
 
-rm -r .in
+rm ./.in/*
 
-mkdir .in
-
-gedit A.cpp >/dev/null &
 

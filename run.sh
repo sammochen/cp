@@ -6,9 +6,11 @@ if [[ $? -ne 0 ]] ; then
 	exit 1
 fi
 
+rm ./.in/blank
+
 empty=0
 
-if [[ ! -e ./.in/in1 ]] ; then
+if [[ ! $(ls -A ./.in/) ]] ; then
 	echo made empty
 	>./.in/blank
 	empty=1
@@ -24,7 +26,7 @@ for file in ./.in/*; do
 	./a.out < "$file"
 done
 
-if [[ -e ./in/blank ]] ; then
+if [[ -e ./.in/blank ]] ; then
 	rm ./.in/blank
 fi
 
