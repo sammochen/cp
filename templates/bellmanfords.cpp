@@ -34,9 +34,35 @@ typedef double db;
 typedef vector<ll> VLL;
 typedef vector<VLL> VVLL;
 
+const ll inf = (ll)1e18 + 5;
+
 namespace SOLVE {	
+	struct edge {
+		ll a, b, d;
+	};
+
+	VLL bellmanfords(vector<edge> & E, ll n, ll s) {
+		VLL d(n, inf);
+		d[s] = 0;
+
+		REP(i,0,n-1) {
+			for (edge e : E) {
+				d[e.b] = min(d[e.b], d[e.a] + e.d);
+			}
+		}
+
+		for (edge e : E) {
+			if (d[e.a] + e.d < d[e.b]) {
+				VLL A;
+				return A;
+			}
+		}
+
+		return d;
+	}
+
 	void main() {
-		
+	
 	}
 }
 

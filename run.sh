@@ -1,33 +1,25 @@
 #!/bin/bash
 
-g++ -std=c++17 A.cpp
+rm ./.in/blank 2> /dev/null
+rm ./.in/temp 2> /dev/null
+rm a.out 2> /dev/null
+
+g++ -O2 -std=c++17 A.cpp 
 
 if [[ $? -ne 0 ]] ; then
+	echo "compilation error"
 	exit 1
 fi
-
-rm ./.in/blank
-
-empty=0
-
-if [[ ! $(ls -A ./.in/) ]] ; then
-	echo made empty
-	>./.in/blank
-	empty=1
-fi
-
-for file in ./.in/*; do
-	if [ $# -ne 0 ] ; then
-		echo --input--
-		cat $file
-	fi
 	
-	echo --output $file --
-	./a.out < "$file"
-done
-
-if [[ -e ./.in/blank ]] ; then
-	rm ./.in/blank
+if [[ $# -eq 1 ]] ; then
+	echo "$1" | ./a.out
+	exit 0
 fi
 
-rm a.out
+if [[ ! "$(ls -A ./.in/)" ]] ; then
+	echo " " | ./a.out 
+else
+	for file in ./.in/*; do
+		cat $file | ./a.out
+	done
+fi

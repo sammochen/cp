@@ -17,6 +17,7 @@ using namespace std;
 
 string to_string(string s) {return s;}
 string to_string(char c) {return "" + c;}
+template <typename A, typename B> string to_string(pair<A,B> p) { return "(" + to_string(p.first) + ", " + to_string(p.second) + ")"; }
 template <typename A> string to_string(vector<A> v) { string s = "("; int first = 1; for (A a : v) { if (!first) { s += ", "; } first = 0; s += to_string(a); } s += ")"; return s; }
 
 void debug_out() {cerr << endl;}
@@ -41,6 +42,10 @@ namespace SOLVE {
 
 
 signed main() {
+	ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+	
 	int t;
 	t = 1;
 	// cin >> t;

@@ -35,6 +35,22 @@ typedef vector<ll> VLL;
 typedef vector<VLL> VVLL;
 
 namespace SOLVE {	
+	VLL p; 
+
+	ll getp(ll x) {
+		if (p[x] == x) return x;
+		p[x] = getp(p[x]);
+		return p[x];
+	}
+
+	void merge(ll a, ll b) {
+		p[getp(a)] = getp(b);
+	}
+
+	ll same(ll a, ll b) {
+		return getp(a) == getp(b);
+	}
+
 	void main() {
 		
 	}

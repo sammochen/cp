@@ -34,72 +34,138 @@ typedef vector<ll> VLL;
 typedef vector<VLL> VVLL;
 
 namespace SOLVE {
-	ll nax = 300; // length of number
-	
-	void proper(VLL & a) {
-		REP(i,0,nax) {
-			if (i != nax-1) a[i+1] += (a[i] / 10);
-			a[i] %= 10;
+	class big {
+		public:
+
+		big() {
+
 		}
-	}
-	
-	VLL to(ll x) {
-		VLL A(nax);
-		A[0] = x;
-		proper(A);
-		return A;
-	}
-	
-	ll from(VLL A) {
-		ll ans = 0;
-		ll p = 1;
-		REP(i,0,min(nax, 17LL)) {
-			ans += p * A[i];
-			p *= 10;
+		
+		big(ll x) {
+			*this = x;
 		}
-		return ans;
-	}
-	
-	// can only divide by ll for now
-	VLL operator/(VLL A, ll b) {
-		VLL C(nax);
-		RREP(i,nax-1,0) {
-			if (i != 0) A[i-1] += A[i] % b * 10;
-			A[i] /= b;
+
+		big(VLL x) {
+			*this = x;
 		}
-		return A;
-	}
-	
-	// O(n)
-	VLL operator+(VLL A, VLL B) {
-		VLL C(nax);
-		REP(i,0,nax) C[i] = A[i] + B[i];
-		proper(C);
-		return C;
-	}
-	
-	// O(nlogb)
-	VLL operator*(VLL A, VLL B) {
-		ll b = from(B);
-		if (b == 0) return to(0);
-		VLL C = A * (B/2);
-		C = C+C;
-		C = b%2 ? C+A : C;
-		return C;
-	}	
-	
-	// O(nlogk)
-	VLL operator^(VLL A, VLL K) {
-		ll k = from(K);
-		if (k == 0) return to(1);
-		VLL C = A ^ (K/2);
-		C = C*C;
-		C = k%2 ? C*A : C;
-		return C;
+
+		big& operator=(const ll & x) {
+			A = {abs(x)};
+			sign = x == 0 ? 0 : x > 0 ? 1 : -1;
+			make_proper();
+			return *this;
+		}
+
+		big& operator=(const VLL &B) {
+			A = B;
+			sign = 1;
+			make_proper();
+			return *this;
+		}
+
+		big& operator=(const big &b) {
+			A = b.A;
+			sign = b.sign;
+			make_proper();
+			return *this;
+		}
+
+
+		big operator+(const big & other) {
+			ll n = max(A.size(), other.A.size());
+			VLL ans(n);
+			REP(i,0,n) {
+				if (i < A.size()) ans[i] += A[i];
+				if (i < other.A.size()) ans[i] += other.A[i];
+			}
+			big res;
+			res = ans;
+			return res;
+		}
+
+		big operator==(ll & other) {
+			big o = other;
+			return *this == o;
+		}
+
+		big operator==(big & other) {
+			return to_ll() == other.to_ll() && sign == other.sign;
+		}
+
+		big operator*(const big & other) {
+			if 
+		}
+		
+		big operator/(const big & other) {
+			return division(other).first;
+		}
+
+		big operator%(const big & other) {
+			return division(other).second;
+		}
+
+		ll to_ll() {
+			return stoll(to_string());
+		}
+
+		ll size() {
+			return A.size();
+		}
+
+
+		string to_string() {
+			string s;
+			RREP(i,A.size()-1,0) s.push_back(A[i] + '0');
+			return s;
+		}
+
+		private:
+		VLL A;
+		int sign = 1;
+		int base = 10; 
+		
+		void make_proper() {
+			REP(i,0,A.size()) {
+				if (A[i] >= base) {
+					if (i == A.size() - 1) {
+						A.push_back(0);
+					} 
+					A[i+1] += A[i] / base;
+					A[i] %= base;
+				}
+			}
+
+			ll index = 0;
+			REP(i,0,A.size()) {
+				if (A[i] != 0) index = i;
+			}
+			A.resize(index+1);
+		}
+
+		pair<big,big> division(big b) {
+			ll divisor = b.to_ll();
+			big copy = (*this).A;
+			big mod;
+
+			RREP(i,copy.size()-1,0) {
+				if (i != 0) copy.A[i-1] += (copy.A[i] % divisor) * base;
+				else mod = copy.A[i] % base;
+				copy.A[i] = copy.A[i] / divisor;
+			}
+
+			copy.make_proper();
+			mod.make_proper();
+			return {copy, mod};		
+		}
+	};
+
+	std::ostream & operator<<(ostream &os, big obj) {
+		os << obj.to_string();
+		return os;
 	}
 	 
 	void main() {
-	
+		print(3 == 2);
 		
 	}
 }

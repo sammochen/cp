@@ -17,6 +17,7 @@ using namespace std;
 
 string to_string(string s) {return s;}
 string to_string(char c) {return "" + c;}
+template <typename A, typename B> string to_string(pair<A,B> p) { return "(" + to_string(p.first) + ", " + to_string(p.second) + ")"; }
 template <typename A> string to_string(vector<A> v) { string s = "("; int first = 1; for (A a : v) { if (!first) { s += ", "; } first = 0; s += to_string(a); } s += ")"; return s; }
 
 void debug_out() {cerr << endl;}
@@ -33,55 +34,49 @@ typedef double db;
 typedef vector<ll> VLL;
 typedef vector<VLL> VVLL;
 
-const ll inf = 1e9 + 7;
-
 namespace SOLVE {	
-	// just bigger
-	ll bs(VLL &A, ll k) {
+	ll bs(VLL & A, ll x) {
 		ll L = 0, R = A.size() - 1;
 		while (L < R) {
-			ll M = (L+R)/2;
-			if (A[M] > k) R = M;
-			else L = M+1;
+			ll M = (L + R) / 2;
+			if (A[M] > x) {
+				R = M;
+			} else {
+				L = M + 1;
+			}
 		}
 		return L;
 	}
-			
-			
-	void main() {
-		
-		
-		ll n, x;
-		cin >> n;
-		
-		VLL endno(n+1, inf);
-		endno[0] = -1;
-		ll ans = 0;
-		
-		REP(i,0,n) {
-			cin >> x;
-			
-			if (x <= endno[1]) {
-				endno[1] = x;
+
+	ll lis(VLL & A) {
+		VLL tails;
+		for (ll a : A) {
+			if (tails.size() == 0) {
+				tails.push_back(a);
+			} else if (a < tails[0]) {
+				tails[0] = a;
+			} else if (a > tails[tails.size() - 1]) {
+				tails.push_back(a);
 			} else {
-	
-				// find element that is just smaller
-				ll j = bs(endno, x);
-				endno[j] = x;
-				ans = max(ans, j);
+				ll i = bs(tails, a);
+				tails[i] = a;
 			}
 		}
 		
-		cout << ans << endl;
+		return tails.size();
+	}
+	
+	void main() {
 		
-		
-			
-			
 	}
 }
 
 
 signed main() {
+	ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+	
 	int t;
 	t = 1;
 	// cin >> t;
