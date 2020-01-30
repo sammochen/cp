@@ -20,6 +20,7 @@ if [[ ! "$(ls -A ./.in/)" ]] ; then
 	echo " " | ./a.out 
 else
 	for file in ./.in/*; do
+		echo $file >&2
 		cat $file | ./a.out
 	done
 fi

@@ -51,6 +51,23 @@ template <typename A, typename B, typename C> void in(A & a, B & b, C & c) { in(
 const ll inf = (ll)1e18 + 5;
 
 namespace SOLVE {	
+	ll value(string s, ll base) {
+		ll b = 1;
+		ll ans = 0;
+		RREP(i, s.length() - 1, 0) {
+			ll x;
+			if (s[i] >= '0' && s[i] <= '9') {
+				x = s[i] - '0';
+			} else {
+				x = s[i] - 'A' + 10;
+			}
+			if (x >= base) return -1;
+			ans += x * b;
+			b *= base;
+		}
+		return ans;
+	}
+
 	void main() {
 		
 	}

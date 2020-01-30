@@ -17,6 +17,7 @@ using namespace std;
 
 string to_string(string s) {return s;}
 string to_string(char c) {return "" + c;}
+
 template <typename A> string to_string(vector<A> v) { string s = "("; int first = 1; for (A a : v) { if (!first) { s += ", "; } first = 0; s += to_string(a); } s += ")"; return s; }
 
 void debug_out() {cerr << endl;}
@@ -37,6 +38,12 @@ namespace SOLVE {
 	class big {
 		public:
 
+		string to_string() {
+			string s;
+			RREP(i,A.size()-1,0) s.push_back(A[i] + '0');
+			return s;
+		}
+
 		big() {
 
 		}
@@ -47,6 +54,14 @@ namespace SOLVE {
 
 		big(VLL x) {
 			*this = x;
+		}
+
+		big(string s) {
+			*this = 0;
+			for (char c : s) {
+				*this = *this * 10;
+				*this = *this + (c - '0');
+			}
 		}
 
 		big& operator=(const ll & x) {
@@ -83,17 +98,18 @@ namespace SOLVE {
 			return res;
 		}
 
-		big operator==(ll & other) {
+		bool operator==(const ll & other) {
 			big o = other;
 			return *this == o;
 		}
 
-		big operator==(big & other) {
-			return to_ll() == other.to_ll() && sign == other.sign;
+		bool operator==(big & other) {
+			if (to_string() == "0" && other.to_string() == "0") return true;
+			return to_string() == other.to_string() && sign == other.sign;
 		}
 
 		big operator*(const big & other) {
-			if 
+			return mult(*this, other);
 		}
 		
 		big operator/(const big & other) {
@@ -104,19 +120,16 @@ namespace SOLVE {
 			return division(other).second;
 		}
 
+		big operator^(const big & other) {
+			return pow(*this, other);
+		}
+
 		ll to_ll() {
 			return stoll(to_string());
 		}
 
 		ll size() {
 			return A.size();
-		}
-
-
-		string to_string() {
-			string s;
-			RREP(i,A.size()-1,0) s.push_back(A[i] + '0');
-			return s;
 		}
 
 		private:
@@ -142,6 +155,15 @@ namespace SOLVE {
 			A.resize(index+1);
 		}
 
+		big mult(big a, big b) {
+			if (b == 0LL) return 0LL;
+			big half = mult(a, b/2);
+			big whole = half + half;
+			if ((b/2) + (b/2) == b) a = a;
+			else whole = whole + a;
+			return whole;
+		}
+
 		pair<big,big> division(big b) {
 			ll divisor = b.to_ll();
 			big copy = (*this).A;
@@ -157,15 +179,33 @@ namespace SOLVE {
 			mod.make_proper();
 			return {copy, mod};		
 		}
+
+		big pow(big a, big b) {
+			if (b == 0LL) return 1LL;
+			big half = pow(a, b/2);
+			big whole = half * half;
+			if ((b/2) + (b/2) == b) a = a;
+			else whole = whole * a;
+			return whole;
+
+		}
 	};
 
 	std::ostream & operator<<(ostream &os, big obj) {
 		os << obj.to_string();
 		return os;
 	}
+
+	string to_string(big a) {
+		return a.to_string();
+	}
 	 
 	void main() {
-		print(3 == 2);
+		big a = 4;
+		big b = 10;
+
+		big c = a ^ b;
+		cout << c << endl;
 		
 	}
 }

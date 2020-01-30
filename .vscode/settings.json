@@ -70,6 +70,8 @@
         "queue": "cpp",
         "shared_mutex": "cpp",
         "stack": "cpp",
-        "memory_resource": "cpp"
+        "memory_resource": "cpp",
+        "codecvt": "cpp",
+        "cuchar": "cpp"
     }
 }
