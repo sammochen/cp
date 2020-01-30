@@ -52,7 +52,9 @@ const ll inf = (ll)1e18 + 5;
 
 namespace SOLVE {	
 	void main() {
-		
+		ll n;
+		cin >> n;
+		cout << n << endl;
 	}
 }
 

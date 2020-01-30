@@ -1,7 +1,5 @@
 #!/bin/bash
 
-rm ./.in/blank 2> /dev/null
-rm ./.in/temp 2> /dev/null
 rm a.out 2> /dev/null
 
 g++ -O2 -std=c++17 A.cpp 
@@ -16,10 +14,10 @@ if [[ $# -eq 1 ]] ; then
 	exit 0
 fi
 
-if [[ ! "$(ls -A ./.in/)" ]] ; then
+if [[ ! "$(ls -A ./in/)" ]] ; then
 	echo " " | ./a.out 
 else
-	for file in ./.in/*; do
+	for file in ./in/*; do
 		echo $file >&2
 		cat $file | ./a.out
 	done
