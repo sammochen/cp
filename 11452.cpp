@@ -29,51 +29,42 @@ typedef pair<ll,ll> PLL;
 
 const ll inf = (ll)1e18 + 5;
 
-ll cur_time;
-VVLL scc;
+// preprocess s.
+// if kmp[i] == j, the length of the suffix that is also a prefix
+VLL kmp(string s) {
+	VLL k(s.length());
+	k[0] = 0; // by definition, otherwise the whole substring is included
 
-void dfs(ll at, VVLL & E, VLL & first, VLL & low, stack<ll> & stack, VLL & onstack) {
-	first[at] = cur_time;
-	low[at] = cur_time;
-	stack.push(at);
-	onstack[at] = 1;
-	cur_time++;
-
-	for (ll to : E[at]) {
-		if (first[to] == -1) {
-			dfs(to, E, first, low, stack, onstack);
-			low[at] = min(low[at], low[to]);
-		} else if (onstack[to]) {
-			low[at] = min(low[at], first[to]);
+	ll i = 1, len = 0;
+	while (i < s.length()) {
+		if (s[i] == s[len]) {
+			k[i] = len+1;
+			i++;
+			len++;
+		} else {
+			if (len == 0) {
+				k[i] = 0;
+				i++;
+			} else {
+				len = k[len - 1];
+			}
 		}
 	}
-
-	if (first[at] == low[at]) {
-		VLL comp;
-		ll last;
-		do {
-			last = stack.top();
-			comp.push_back(last);
-			onstack[last] = 0;
-			stack.pop();
-		} while (last != at);
-
-		scc.push_back(comp);
-	}
-}	
+	return k;
+}
 
 void solve() {
-	cur_time = 1;
-	ll n, m;
-	VVLL E(n);
-	VLL first(n, -1), low(n), onstack(n);
-	stack<ll> stack;
-
-	REP(i,0,n) {
-		if (first[i] == -1) dfs(i, E, first, low, stack, onstack);
+	string s;
+	cin >> s;
+	VLL k = kmp(s);
+	ll ind = 1;
+	REP(i,0,k.size()) {
+		if (k[i] * 2 == i + 1) ind = i+1;
 	}
-	
-	
+	// find the biggest index 
+	string ans = s.substr(s.length() - ind);
+	ans = ans + ans + ans;
+	cout << ans.substr(0, 8) << "..." << endl;
 }
 
 signed main() {

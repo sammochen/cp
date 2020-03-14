@@ -18,6 +18,5 @@ fi
 
 cp ./templates/$1.cpp $name".cpp"
 
-rm ./.in/*
 
 

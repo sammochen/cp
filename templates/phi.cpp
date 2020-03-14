@@ -29,56 +29,58 @@ typedef pair<ll,ll> PLL;
 
 const ll inf = (ll)1e18 + 5;
 
-ll cur_time;
-VVLL scc;
+ll nax = 1005;
+VLL p(nax*nax, 1);
+VLL P;
 
-void dfs(ll at, VVLL & E, VLL & first, VLL & low, stack<ll> & stack, VLL & onstack) {
-	first[at] = cur_time;
-	low[at] = cur_time;
-	stack.push(at);
-	onstack[at] = 1;
-	cur_time++;
+void init() {
+	p[0] = 0;
+	p[1] = 0;
 
-	for (ll to : E[at]) {
-		if (first[to] == -1) {
-			dfs(to, E, first, low, stack, onstack);
-			low[at] = min(low[at], low[to]);
-		} else if (onstack[to]) {
-			low[at] = min(low[at], first[to]);
+	for (ll x = 2; x < nax*nax; x++) {
+		if (p[x] == 0) {
+			continue;
+		}
+
+		P.push_back(x);
+		
+		for (ll f = x; x * f < nax * nax; f++) {
+			p[x*f] = 0;
 		}
 	}
+}
 
-	if (first[at] == low[at]) {
-		VLL comp;
-		ll last;
-		do {
-			last = stack.top();
-			comp.push_back(last);
-			onstack[last] = 0;
-			stack.pop();
-		} while (last != at);
+ll phi(ll x) {
+    // find all prime factors, then it is x * product(1 - 1/p)
+    ll ans = x;
+    REP(i,0,P.size()) {
+        if (P[i] * P[i] > x) break;
+        if (x % P[i] == 0) {
+            ans *= (P[i] - 1);
+            ans /= P[i];
+        }
+        while (x % P[i] == 0) {
+            x /= P[i];
+        }
+    }
 
-		scc.push_back(comp);
-	}
-}	
+    if (x != 1) {
+        ans *= (x-1);
+        ans /= x;
+    }
+    return ans;
+}
 
 void solve() {
-	cur_time = 1;
-	ll n, m;
-	VVLL E(n);
-	VLL first(n, -1), low(n), onstack(n);
-	stack<ll> stack;
-
-	REP(i,0,n) {
-		if (first[i] == -1) dfs(i, E, first, low, stack, onstack);
-	}
-	
-	
+    ll n;
+    while (cin >> n, n) {
+        cout << phi(n) << endl;
+    }
 }
 
 signed main() {
+	init();
 	ll t = 1;
-	cin >> t;
 	REP(i,0,t) solve();
 	return 0;
 }

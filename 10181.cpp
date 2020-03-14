@@ -29,51 +29,56 @@ typedef pair<ll,ll> PLL;
 
 const ll inf = (ll)1e18 + 5;
 
-ll cur_time;
-VVLL scc;
+ll bfs(VVLL s) {
+	map<VVLL,ll> d;
+	queue<VVLL> Q;
+	Q.push(s);
+	d[s] = 1;
+	while (Q.size()) {
+		VVLL at = Q.front();
+		Q.pop();
 
-void dfs(ll at, VVLL & E, VLL & first, VLL & low, stack<ll> & stack, VLL & onstack) {
-	first[at] = cur_time;
-	low[at] = cur_time;
-	stack.push(at);
-	onstack[at] = 1;
-	cur_time++;
+		if (d[at] == 51) break;
 
-	for (ll to : E[at]) {
-		if (first[to] == -1) {
-			dfs(to, E, first, low, stack, onstack);
-			low[at] = min(low[at], low[to]);
-		} else if (onstack[to]) {
-			low[at] = min(low[at], first[to]);
+		ll good = 1;
+		ll freei = -1, freej = -1;
+		REP(i,0,4) {
+			REP(j,0,4) {
+				if (at[i][j] == 0) {
+					freei = i;
+					freej = j;
+				}
+				if (at[i][j] != (i*4+j+1)%16) good = 0;
+			}
+		}
+		if (good) return d[at];
+
+		VLL di = {0,0,1,-1};
+		VLL dj = {1,-1,0,0};
+		REP(x,0,4) {
+			ll ii = freei + di[x];
+			ll jj = freej + dj[x];
+			if (ii < 0 || ii >= 4 || jj < 0 || jj >= 4) continue;
+			VVLL to = at;
+			to[freei][freej] = at[ii][jj];
+			to[ii][jj] = 0;
+			if (d[to] == 0) {
+				d[to] = d[at] + 1;
+				Q.push(to);
+			}
 		}
 	}
-
-	if (first[at] == low[at]) {
-		VLL comp;
-		ll last;
-		do {
-			last = stack.top();
-			comp.push_back(last);
-			onstack[last] = 0;
-			stack.pop();
-		} while (last != at);
-
-		scc.push_back(comp);
-	}
-}	
+	return -1;
+}
 
 void solve() {
-	cur_time = 1;
-	ll n, m;
-	VVLL E(n);
-	VLL first(n, -1), low(n), onstack(n);
-	stack<ll> stack;
-
-	REP(i,0,n) {
-		if (first[i] == -1) dfs(i, E, first, low, stack, onstack);
+	VVLL A(4, VLL(4));
+	REP(i,0,4) REP(j,0,4) {
+		cin >> A[i][j];
 	}
-	
-	
+
+	ll ans = bfs(A);
+	debug(ans);
 }
 
 signed main() {

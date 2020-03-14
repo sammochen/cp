@@ -29,51 +29,31 @@ typedef pair<ll,ll> PLL;
 
 const ll inf = (ll)1e18 + 5;
 
-ll cur_time;
-VVLL scc;
-
-void dfs(ll at, VVLL & E, VLL & first, VLL & low, stack<ll> & stack, VLL & onstack) {
-	first[at] = cur_time;
-	low[at] = cur_time;
-	stack.push(at);
-	onstack[at] = 1;
-	cur_time++;
-
-	for (ll to : E[at]) {
-		if (first[to] == -1) {
-			dfs(to, E, first, low, stack, onstack);
-			low[at] = min(low[at], low[to]);
-		} else if (onstack[to]) {
-			low[at] = min(low[at], first[to]);
+void solve() {
+	string s;
+	cin >> s;
+	map<string,ll> A;
+	set<string> ans;
+	ll len = 0;
+	
+	REP(i,0,s.length()) {
+		string sub = "";
+		REP(j,i,s.length()) {
+			sub.push_back(s[j]);
+			A[sub]++;
+			if (A[sub] >= 2 && sub.length() > len) {
+				ans = {sub};
+				len = sub.length();
+			} else if (A[sub] >= 2 && sub.length() == len) {
+				ans.insert(sub);
+			}
 		}
 	}
 
-	if (first[at] == low[at]) {
-		VLL comp;
-		ll last;
-		do {
-			last = stack.top();
-			comp.push_back(last);
-			onstack[last] = 0;
-			stack.pop();
-		} while (last != at);
 
-		scc.push_back(comp);
-	}
-}	
+	if (len == 0) cout << "No repetitions found!" << endl;
+	else cout << *ans.begin() << ' ' << A[*ans.begin()] << endl;
 
-void solve() {
-	cur_time = 1;
-	ll n, m;
-	VVLL E(n);
-	VLL first(n, -1), low(n), onstack(n);
-	stack<ll> stack;
-
-	REP(i,0,n) {
-		if (first[i] == -1) dfs(i, E, first, low, stack, onstack);
-	}
-	
-	
 }
 
 signed main() {
