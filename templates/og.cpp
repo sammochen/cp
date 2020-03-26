@@ -21,7 +21,7 @@ template <typename Head, typename... Tail> void debug_out(Head H, Tail... T) { c
 #define debug(...) do { } while (false)
 #endif
 
-typedef  long long ll;
+typedef long long ll;
 typedef double db;
 typedef vector<ll> VLL;
 typedef vector<VLL> VVLL;

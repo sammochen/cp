@@ -29,12 +29,44 @@ typedef pair<ll,ll> PLL;
 
 const ll inf = (ll)1e18 + 5;
 
+struct trienode {
+	struct trienode *children[26];
+	int endofword;
+};
+
+vector<trienode*> nodes;
+
+trienode *getNode(void) {
+	trienode *pnode = new trienode;
+	pnode->endofword = 0;
+	for (int i = 0; i < 26; i++) {
+		pnode->children[i] = NULL;
+	}
+	nodes.push_back(pnode);
+	return pnode;
+}
+
+void insert(trienode *root, string key) { 
+    trienode *crawl = root; 
+    for (int i = 0; i < key.length(); i++) { 
+        int index = key[i] - 'A'; 
+        if (!crawl->children[index]) {
+			crawl->children[index] = getNode(); 
+		}
+        crawl = crawl->children[index]; 
+    } 
+  
+    // mark last node as leaf 
+    crawl->endofword = 1; 
+}
+
 void solve() {
 
 }
 
 signed main() {
 	ll t = 1;
+	cin >> t;
 	REP(i,0,t) solve();
 	return 0;
 }

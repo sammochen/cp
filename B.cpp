@@ -29,7 +29,22 @@ typedef pair<ll,ll> PLL;
 
 const ll inf = (ll)1e18 + 5;
 
+db dist(db a, db b, db c, db d) {
+	return sqrt(pow(a-c,2)+pow(b-d,2));
+}
 void solve() {
+	db x, y, a, b, c, d;
+	cin >> x >> y >> a >> b >> c >> d;
+	db ans = inf;
+	if (x >= a && x <= c) ans = min({ans, abs(y-b), abs(y-d)});
+	if (y >= b && y <= d) ans = min({ans, abs(x-a), abs(x-c)});
+
+	ans = min(ans,dist(x,y,a,b));
+	ans = min(ans,dist(x,y,a,d));
+	ans = min(ans,dist(x,y,c,b));
+	ans = min(ans,dist(x,y,c,d));
+
+	printf("%.3f\n", ans);
 
 }
 
