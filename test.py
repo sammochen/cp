@@ -1,1 +1,0 @@
-open("error.txt", "r")
