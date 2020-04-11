@@ -21,14 +21,14 @@ template <typename Head, typename... Tail> void debug_out(Head H, Tail... T) { c
 #define debug(...) do { } while (false)
 #endif
 
-typedef long long ll;
+typedef int ll;
 typedef double db;
 typedef vector<ll> VLL;
 typedef vector<VLL> VVLL;
 typedef pair<ll,ll> PLL;
 
-const ll inf = (ll)1e18 + 5;
-VLL bfs(VVLL & E, VVLL & W, ll s) {
+const ll inf = (ll)1e9 + 7;
+VLL bfs(VVLL & E, VVLL & W, VVLL & costs, ll s, ll limit) {
     VLL D(E.size(), inf);
     queue<ll> Q;
     D[s] = 0;
@@ -37,6 +37,8 @@ VLL bfs(VVLL & E, VVLL & W, ll s) {
         ll at = Q.front();
         Q.pop();
         for (ll to : E[at]) {
+            if (costs[at][to] > limit) continue;
+
             if (W[at][to] <= 0) continue;
             if (D[to] != inf) continue;
             D[to] = D[at] + 1;
@@ -47,14 +49,16 @@ VLL bfs(VVLL & E, VVLL & W, ll s) {
 }
 
 // returns the maxflow possible from at to t
-ll dfs(VVLL & E, VVLL & W, VLL & D, ll at, ll t, ll f) {
+ll dfs(VVLL & E, VVLL & W, VVLL & costs, VLL & D, ll at, ll t, ll f, ll limit) {
     if (at == t) {
         return f;
     }
 
     for (ll to : E[at]) {
+        if (costs[at][to] > limit) continue;
+
         if (W[at][to] > 0 && D[to] == D[at] + 1) {
-            ll flow = dfs(E, W, D, to, t, min(f, W[at][to]));
+            ll flow = dfs(E, W, costs, D, to, t, min(f, W[at][to]), limit);
             if (flow > 0) {
                 W[at][to] -= flow;
                 W[to][at] += flow;
@@ -66,16 +70,16 @@ ll dfs(VVLL & E, VVLL & W, VLL & D, ll at, ll t, ll f) {
 }
 
 // returns the max flow
-ll dinic(VVLL E, VVLL W, ll s, ll t) {
+ll dinic(VVLL E, VVLL W, VVLL & costs, ll s, ll t, ll limit) {
     ll mf = 0;
     while (1) {
         // do bfs
-        VLL D = bfs(E, W, s);
+        VLL D = bfs(E, W, costs, s, limit);
         if (D[t] == inf) return mf;
 
         // do dfs 
         while (1) {
-            ll f = dfs(E,W,D,s,t,inf);
+            ll f = dfs(E,W,costs,D,s,t,inf, limit);
             mf += f;
             if (f == 0) break;
         }
@@ -83,78 +87,70 @@ ll dinic(VVLL E, VVLL W, ll s, ll t) {
     return mf;
 }
 
-void addedge(VVLL & E, VVLL & W, ll a, ll b, ll w) {
+void addedge(VVLL & E, VVLL & W, VVLL &costs, ll a, ll b, ll w, ll c) {
     E[a].push_back(b);
     E[b].push_back(a);
     W[a][b] = w;
+    costs[a][b] = c;
+    costs[b][a] = c;
 }
 
 ll n, d, m, test = 1;
 
-ll state(ll city, ll day, ll one) {
-    return (city*(d+2) + day) * 2 + one;
+ll state(ll city, ll day) {
+    return city * (d+1) + day;
 }
 
 void solve() {
     cin >> n >> d >> m;
+    ll states = n*(d+1);
+    ll s = states + 3;
+    ll t = state(n-1, d);
 
-    VVLL edges(m, VLL(5)); // u, v, c passengers, p price, e evening
-    VLL costs;
+    VVLL E(states + 5);
+    VVLL W(states + 5, VLL(states + 5));
+    VVLL costs(states + 5, VLL(states + 5));
+    set<ll> prices;
     REP(i,0,m) {
-        REP(j,0,5) {
-            cin >> edges[i][j];
-        }
-        costs.push_back(edges[i][3]);
+        ll u, v, c, p, e;
+        cin >> u >> v >> c >> p >> e;
+        addedge(E, W, costs, state(u-1,e), state(v-1,e+1), c, p);
+        prices.insert(p);
     }
 
-    VLL people(n); // the people that are already there
     ll total = 0;
     REP(i,0,n) {
-        cin >> people[i];
-        total += people[i];
+        ll x;
+        cin >> x;
+        addedge(E, W, costs, s, state(i, 0), x, 0);
+        total += x;
     }
 
-    sort(costs.begin(), costs.end());
-    ll L = 0, R = costs.size() - 1;
-    ll states = (n+1)*(d+2)*2;
-    ll good = 0;
+    REP(i,0,n) {
+        REP(j,0,d) {
+            addedge(E, W, costs, state(i,j), state(i,j+1), inf, 0);
+        }
+    }
+
+    if (dinic(E, W, costs, s, t, 100005) != total) {
+        printf("Case #%d: Impossible\n", test++);
+        return;
+    }
+
+    VLL unique;
+    for (ll p : prices) unique.push_back(p);
+    ll L = 0, R = unique.size() - 1;
     while (L < R) {
         ll M = (L+R) / 2;       
-
-        // do flow
-        VVLL E(states + 5);
-        VVLL W(states + 5, VLL(states + 5));
-        REP(i,0,m) {
-            if (edges[i][3] <= costs[M]) {
-                addedge(E, W, state(edges[i][0] - 1, edges[i][4], 1), state(edges[i][1] - 1, edges[i][4] + 1, 0), edges[i][2]);
-            }
-        }
-
-        // stay in the same city overnight, and over day
-        REP(i,0,n) {
-            REP(j,0,d+1) {
-                addedge(E, W, state(i,j,0), state(i,j,1), total);
-                addedge(E, W, state(i,j,1), state(i,j+1,0), total);
-            }
-        }
-
-        ll s = states + 3;
-        REP(i,0,n) {
-            addedge(E, W, s, state(i,0,0), people[i]);
-        }
-        
-        ll ans = dinic(E, W, s, state(n-1,d,1));
+        ll ans = dinic(E, W, costs, s, t, unique[M]);
 
         if (ans == total) {
-            good = 1;
             R = M;
         } else {
             L = M+1;
         }
     }
-
-    if (!good) printf("Case #%lld: Impossible\n", test++);
-    else printf("Case #%lld: %lld\n", test++, costs[L]);
+    printf("Case #%d: %d\n", test++, unique[L]);
 
 }
 

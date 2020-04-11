@@ -29,64 +29,61 @@ typedef pair<ll,ll> PLL;
 
 const ll inf = (ll)1e18 + 5;
 
-struct trienode {
-	struct trienode *children[26];
-	int endofword;
+struct edge {
+    ll a,b,d;
 };
 
-vector<trienode*> nodes;
+VLL p; 
 
-trienode *getNode(void) {
-	trienode *pnode = new trienode;
-	pnode->endofword = 0;
-	for (int i = 0; i < 26; i++) {
-		pnode->children[i] = NULL;
-	}
-	nodes.push_back(pnode);
-	return pnode;
+ll getp(ll x) {
+    if (p[x] == x) return x;
+    p[x] = getp(p[x]);
+    return p[x];
 }
 
-void insert(trienode *root, string key) { 
-    trienode *crawl = root; 
-    for (int i = 0; i < key.length(); i++) { 
-        int index = key[i] - 'A'; 
-        if (!crawl->children[index]) {
-			crawl->children[index] = getNode(); 
-		}
-        crawl = crawl->children[index]; 
-    } 
-  
-    // mark last node as leaf 
-    crawl->endofword = 1; 
+void merge(ll a, ll b) {
+    p[getp(a)] = getp(b);
 }
 
-bool search(trienode * root, int ind, string & key) {
-    if (root == NULL) return false;
-    if (ind == key.length()) {
-        if (root->endofword) return true;
-        return false;
+ll same(ll a, ll b) {
+    return getp(a) == getp(b);
+}
+
+vector<vector<edge>> kruskals(vector<edge> & edgelist, ll n) {
+    p.clear();
+    p.resize(n);
+    REP(i,0,n) p[i] = i;
+
+    vector<vector<edge>> adjlist(n);
+
+   
+    for (edge e: edgelist) {
+        if (same(e.a, e.b)) continue;
+        merge(e.a, e.b);
+        adjlist[e.a].push_back({e.a, e.b, e.d});
+        adjlist[e.b].push_back({e.b, e.a, e.d});
     }
-    
-    if (key[ind] == '.') {
-        for (int i = 0; i < 26; i++) {
-            if (search(root->children[i], ind+1, key)) return true;
-        }
-        return false;
-    } else {
-        return search(root->children[key[ind]-'a'], ind+1, key);
-    }
-    
-    
-    
-}
 
+    return adjlist;
+}
 void solve() {
+    ll n, m;
+    cin >> n >> m;
+    vector<edge> edgelist(m);
+    REP(i,0,m) {
+        ll a, b, w;
+        cin >> a >> b >> w;
+        a--;b--;
+        edgelist.push_back({a,b,w});
+    }
+
+    // set up a minimum spanning tree - because it is never optimal to choose the highest ones when you dont need to
+    vector<vector<edge>> adjlist = kruskals(edgelist);
 
 }
 
 signed main() {
 	ll t = 1;
-	cin >> t;
 	REP(i,0,t) solve();
 	return 0;
 }

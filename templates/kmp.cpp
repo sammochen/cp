@@ -21,7 +21,7 @@ template <typename Head, typename... Tail> void debug_out(Head H, Tail... T) { c
 #define debug(...) do { } while (false)
 #endif
 
-typedef  long long ll;
+typedef long long ll;
 typedef double db;
 typedef vector<ll> VLL;
 typedef vector<VLL> VVLL;
@@ -29,32 +29,21 @@ typedef pair<ll,ll> PLL;
 
 const ll inf = (ll)1e18 + 5;
 
-// preprocess s.
-// if kmp[i] == j, the length of the suffix that is also a prefix
 VLL kmp(string s) {
-	VLL k(s.length());
-	k[0] = 0; // by definition, otherwise the whole substring is included
-
-	ll i = 1, len = 0;
-	while (i < s.length()) {
-		if (s[i] == s[len]) {
-			k[i] = len+1;
-			i++;
-			len++;
-		} else {
-			if (len == 0) {
-				k[i] = 0;
-				i++;
-			} else {
-				len = k[len - 1];
-			}
+	ll n = s.length();
+	VLL k(n);
+	REP(i,1,n) {
+		ll prev = k[i-1];
+		while (prev && s[i] != s[prev]) {
+			prev = k[prev - 1];
 		}
+		k[i] = prev + (s[i] == s[prev]);
 	}
-	return k;
+    return k;
 }
 
 void solve() {
-
+	
 }
 
 signed main() {

@@ -29,56 +29,33 @@ typedef pair<ll,ll> PLL;
 
 const ll inf = (ll)1e18 + 5;
 
-struct trienode {
-	struct trienode *children[26];
-	int endofword;
-};
+struct hasher {
+	string s;
+	ll mod = 1000000207;
+	ll seed = 31;
+	VLL pow, val;
 
-vector<trienode*> nodes;
-
-trienode *getNode(void) {
-	trienode *pnode = new trienode;
-	pnode->endofword = 0;
-	for (int i = 0; i < 26; i++) {
-		pnode->children[i] = NULL;
+	ll toll(char c) {
+		return c - 'a' + 1;
 	}
-	nodes.push_back(pnode);
-	return pnode;
-}
-
-void insert(trienode *root, string key) { 
-    trienode *crawl = root; 
-    for (int i = 0; i < key.length(); i++) { 
-        int index = key[i] - 'A'; 
-        if (!crawl->children[index]) {
-			crawl->children[index] = getNode(); 
+	hasher(string str) : s(str) {
+		pow.resize(s.length() + 1);
+		val.resize(s.length() + 1);
+		pow[0] = 1;
+		REP(i,0,s.length()) {
+			val[i+1] = (val[i] + toll(s[i]) * pow[i] % mod) % mod;
+			pow[i+1] = (pow[i] * seed) % mod;
 		}
-        crawl = crawl->children[index]; 
-    } 
-  
-    // mark last node as leaf 
-    crawl->endofword = 1; 
-}
+	}
 
-bool search(trienode * root, int ind, string & key) {
-    if (root == NULL) return false;
-    if (ind == key.length()) {
-        if (root->endofword) return true;
-        return false;
-    }
-    
-    if (key[ind] == '.') {
-        for (int i = 0; i < 26; i++) {
-            if (search(root->children[i], ind+1, key)) return true;
-        }
-        return false;
-    } else {
-        return search(root->children[key[ind]-'a'], ind+1, key);
-    }
-    
-    
-    
-}
+	ll f(ll i, ll j) {
+		ll diff = (val[j+1] - val[i] + mod) % mod;
+		// times this by how far away i is! 
+		diff *= pow[s.length() - i];
+		diff %= mod;
+		return diff;
+	}
+};
 
 void solve() {
 
@@ -86,7 +63,6 @@ void solve() {
 
 signed main() {
 	ll t = 1;
-	cin >> t;
 	REP(i,0,t) solve();
 	return 0;
 }

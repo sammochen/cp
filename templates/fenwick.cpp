@@ -29,64 +29,44 @@ typedef pair<ll,ll> PLL;
 
 const ll inf = (ll)1e18 + 5;
 
-struct trienode {
-	struct trienode *children[26];
-	int endofword;
-};
+#define lsb(i) ((i)&-(i))
 
-vector<trienode*> nodes;
+const ll nax = 1e5;
+ll arr[nax];
 
-trienode *getNode(void) {
-	trienode *pnode = new trienode;
-	pnode->endofword = 0;
-	for (int i = 0; i < 26; i++) {
-		pnode->children[i] = NULL;
-	}
-	nodes.push_back(pnode);
-	return pnode;
+void add(ll i, ll k) {
+    while (i < nax) {
+        arr[i] += k;
+        i += lsb(i);
+    }
 }
 
-void insert(trienode *root, string key) { 
-    trienode *crawl = root; 
-    for (int i = 0; i < key.length(); i++) { 
-        int index = key[i] - 'A'; 
-        if (!crawl->children[index]) {
-			crawl->children[index] = getNode(); 
-		}
-        crawl = crawl->children[index]; 
-    } 
-  
-    // mark last node as leaf 
-    crawl->endofword = 1; 
-}
-
-bool search(trienode * root, int ind, string & key) {
-    if (root == NULL) return false;
-    if (ind == key.length()) {
-        if (root->endofword) return true;
-        return false;
+ll sum(ll i) {
+    ll total = 0;
+    while (i > 0) {
+        total += arr[i];
+        i -= lsb(i);
     }
-    
-    if (key[ind] == '.') {
-        for (int i = 0; i < 26; i++) {
-            if (search(root->children[i], ind+1, key)) return true;
-        }
-        return false;
-    } else {
-        return search(root->children[key[ind]-'a'], ind+1, key);
-    }
-    
-    
-    
+    return total;
 }
 
 void solve() {
+    memset(arr,0,sizeof(arr));
+    ll n;
+    cin >> n;
+    VLL A(n);
+    REP(i,0,n) {
+        cin >> A[i];
+    }
 
+    // binary search and fenwick tree
+
+    
 }
 
 signed main() {
 	ll t = 1;
-	cin >> t;
+    cin >> t;
 	REP(i,0,t) solve();
 	return 0;
 }

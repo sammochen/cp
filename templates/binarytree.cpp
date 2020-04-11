@@ -29,58 +29,53 @@ typedef pair<ll,ll> PLL;
 
 const ll inf = (ll)1e18 + 5;
 
-struct trienode {
-	struct trienode *children[26];
-	int endofword;
+struct Node {
+	Node *left, *right;
+	ll val;
 };
 
-vector<trienode*> nodes;
+Node* build(ll ind, VLL & A) {
+	if (ind >= A.size()) return NULL;
 
-trienode *getNode(void) {
-	trienode *pnode = new trienode;
-	pnode->endofword = 0;
-	for (int i = 0; i < 26; i++) {
-		pnode->children[i] = NULL;
+	Node * node = new Node();
+	node->val = A[ind];
+	node->left = build(ind * 2, A);
+	node->right = build(ind * 2 + 1, A);
+	return node;
+}
+
+ll inv = -1;
+ll maxlayers = 3;
+void draw(Node * node, ll layer, VVLL & layers) {
+	if (layer == maxlayers) return;
+	if (node) {
+		layers[layer].push_back(node->val);
+		draw(node->left, layer+1, layers);
+		draw(node->right, layer+1, layers);
+	} else {
+		layers[layer].push_back(inv);
+		draw(NULL, layer+1, layers);
+		draw(NULL, layer+1, layers);
 	}
-	nodes.push_back(pnode);
-	return pnode;
-}
 
-void insert(trienode *root, string key) { 
-    trienode *crawl = root; 
-    for (int i = 0; i < key.length(); i++) { 
-        int index = key[i] - 'A'; 
-        if (!crawl->children[index]) {
-			crawl->children[index] = getNode(); 
-		}
-        crawl = crawl->children[index]; 
-    } 
-  
-    // mark last node as leaf 
-    crawl->endofword = 1; 
 }
-
-bool search(trienode * root, int ind, string & key) {
-    if (root == NULL) return false;
-    if (ind == key.length()) {
-        if (root->endofword) return true;
-        return false;
-    }
-    
-    if (key[ind] == '.') {
-        for (int i = 0; i < 26; i++) {
-            if (search(root->children[i], ind+1, key)) return true;
-        }
-        return false;
-    } else {
-        return search(root->children[key[ind]-'a'], ind+1, key);
-    }
-    
-    
-    
+string to_string(Node * node) {
+	VVLL layers(maxlayers);
+	draw(node, 0, layers);
+	return to_string(layers);
 }
 
 void solve() {
+	ll n, m;
+	cin >> n >> m;
+	VLL A(1<<n);
+	REP(i,0,(1<<n)-1) {
+		cin >> A[i+1];
+	}
+
+	Node *node = build(1, A);
+	debug(node);
+
 
 }
 
