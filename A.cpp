@@ -3,8 +3,18 @@
 
 using namespace std;
 
+typedef long long ll;
+typedef double db;
+typedef vector<ll> VLL;
+typedef vector<VLL> VVLL;
+typedef pair<ll,ll> PLL;
+
 #define REP(x,l,u) for(ll x = l; x < u; x++)
 #define RREP(x,l,u) for(ll x = l; x >= u; x--)
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define mst(x,v) memset(x, v, sizeof(x))
+#define sz(x) x.size()
 
 string to_string(string s) {return s;}
 string to_string(char c) {string s = string(1, c);return s;}
@@ -15,42 +25,27 @@ template <typename A> string to_string(set<A> v) { string s = "("; int first = 1
 void debug_out() {cerr << endl;}
 template <typename Head, typename... Tail> void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...); }
 
+void in() {}
+template <typename A> void in(A & x) { cin >> x; }
+template <typename A, typename B> void in(pair<A,B> & x) { in(x.first); in(x.second); }
+template <typename A> void in(vector<A> & x) { REP(i,0,(ll)x.size()) in(x[i]); }
+template <typename Head, typename... Tail> void in(Head & H, Tail & ... T) {in(H); in(T...); }
+
 #ifndef ONLINE_JUDGE
 #define debug(...) do { cerr << "[" << #__VA_ARGS__ << "]:", debug_out(__VA_ARGS__); } while (false)
 #else
 #define debug(...) do { } while (false)
 #endif
 
-typedef long long ll;
-typedef double db;
-typedef vector<ll> VLL;
-typedef vector<VLL> VVLL;
-typedef pair<ll,ll> PLL;
-
 const ll inf = (ll)1e18 + 5;
+const ll mod = 1e9+7;
 
-VLL zf(string s) {
-	ll n = s.length();
-	VLL z(n);
-	ll l = 0, r = 0;
-	REP(i,1,n) {
-		// if within the bound, update the z value
-		if (i <= r) {
-			z[i] = min(r-i+1, z[i-l]);
-		}
-		// push it up if you can - this might push the r value up
-		while (i+z[i] < n && s[i+z[i]] == s[z[i]]) {
-			z[i]++;
-		}
-		// if the value exceeds the bounds, update bound
-		if (i+z[i] >= r) {
-			r = i+z[i]-1;
-			l = i;
-		}
-	}
-	return z;
-}
 void solve() {
+	ll n;
+	in(n);
+	VLL A(n);
+	in(A);
+
 	
 }
 

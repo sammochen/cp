@@ -29,29 +29,45 @@ typedef pair<ll,ll> PLL;
 
 const ll inf = (ll)1e18 + 5;
 
-#define lsb(i) ((i)&-(i))
+struct point {
+	ll x, y;
+};
 
-const ll nax = 1e5;
-ll arr[nax];
-
-void add(ll i, ll k) {
-    while (i < nax) {
-        arr[i] += k;
-        i += lsb(i);
-    }
+// returns 0 if collinear, 1 if clockwise, -1 if counterclockwise
+ll cw(point a, point b, point c) {
+	ll v = (b.y - a.y) * (c.x - b.x) - (c.y - b.y) * (b.x - a.x);
+	return v == 0 ? 0 : v < 0 ? -1 : 1;
 }
 
-ll sum(ll i) {
-    ll total = 0;
-    while (i > 0) {
-        total += arr[i];
-        i -= lsb(i);
-    }
-    return total;
+bool operator<(const point & a, const point & b) {
+	return a.x == b.x ? a.y < b.y : a.x < b.x;
 }
 
+vector<point> hull(vector<point> & A) {
+	ll n = A.size();
+	sort(A.begin(), A.end());
+	vector<point> H(2*n);
+
+	ll k = 0; // size
+	REP(i,0,n) {
+		while (k >= 2 && cw(H[k-2], H[k-1], A[i]) == -1) {
+			k--;
+		}
+		H[k++] = A[i];
+	}
+
+	ll t = k+1;
+	RREP(i,n-2,0) { // takes it all the way to the end
+		while (k >= t && cw(H[k-2], H[k-1], A[i]) == -1) {
+			k--;
+		}
+		H[k++] = A[i];
+	}
+
+	H.resize(k-1); // discards the last one
+	return H;
+}
 void solve() {
-    memset(arr,0,sizeof(arr));
 
 }
 

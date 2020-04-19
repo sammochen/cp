@@ -63,24 +63,13 @@ map<ll,ll> pf(ll x) {
     return f;
 }
 
-ll f(ll a, ll c) {
-    if (c % a) return -1;
-    // prime factorise both
-}
-
 void solve() {
-    ll a, c;
-    cin >> a >> c;
-    ll ans = f(a,c);
-    if (ans == -1) cout << "NO SOLUTION" << endl;
-    else cout << ans << endl;
 
 }
 
 signed main() {
 	init();
 	ll t = 1;
-    cin >> t;
 	REP(i,0,t) solve();
 	return 0;
 }

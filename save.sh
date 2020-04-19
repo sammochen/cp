@@ -15,6 +15,8 @@ elif [ $1 == hr ] ; then
 	folder="hackerrank"
 elif [ $1 == uva ] ; then
 	folder="uva"
+elif [ $1 == ac ] ; then
+	folder="atcoder"
 else 
 	echo "not recognised"
 	exit 1

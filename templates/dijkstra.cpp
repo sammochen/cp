@@ -39,7 +39,7 @@ struct todo {
 
 bool operator<(const todo & a, const todo & b) {
     return a.d > b.d;
-};
+}
 
 VLL dijkstra(vector<vector<edge>> & E, ll s) {
     VLL d(E.size(), inf);
