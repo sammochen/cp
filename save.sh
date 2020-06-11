@@ -17,6 +17,8 @@ elif [ $1 == uva ] ; then
 	folder="uva"
 elif [ $1 == ac ] ; then
 	folder="atcoder"
+elif [ $1 == aizu ] ; then
+	folder="aizu"
 else 
 	echo "not recognised"
 	exit 1

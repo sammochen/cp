@@ -1,1 +1,1 @@
-rm in*
+rm *in

@@ -39,30 +39,32 @@ template <typename Head, typename... Tail> void in(Head & H, Tail & ... T) {in(H
 
 const ll inf = (ll)1e18 + 5;
 const ll mod = 1e9+7;
-
-ll nax = 1005;
-VLL p(nax*nax, 1);
-VLL P;
-
-void init() {
-	p[0] = 0;
-	p[1] = 0;
-
-	for (ll x = 2; x < nax*nax; x++) {
-		if (p[x] == 0) {
-			continue;
-		}
-
-		P.push_back(x);
-		
-		for (ll f = x; x * f < nax * nax; f++) {
-			p[x*f] = 0;
-		}
-	}
-}
+const db pi = acos(0) * 2;
 
 void solve() {
-	
+	ll n;
+	while (in(n), n) {
+		db x = 0, y = 0;
+		db dx = 0 , dy = 0;
+		db t = 0.01;
+
+		db theta = 0; // angle of the phone
+		REP(i,0,n) {
+			db a,ax,ay;
+			in(a,ax,ay);
+
+			theta += a * t;
+
+			db realax = ax*cos(theta / 180 * pi) + ay*sin(theta / 180 * pi);
+			db realay = - ay*cos(theta / 180 * pi) + ax*sin(theta / 180 * pi);
+			
+			dx += realax * t;
+			dy += realay * t;
+			x += dx * t;
+			y += dy * t;
+		}
+		printf("%.1f\n", x);
+	}
 }
 
 signed main() {

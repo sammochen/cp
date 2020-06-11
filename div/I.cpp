@@ -40,29 +40,45 @@ template <typename Head, typename... Tail> void in(Head & H, Tail & ... T) {in(H
 const ll inf = (ll)1e18 + 5;
 const ll mod = 1e9+7;
 
-ll nax = 1005;
-VLL p(nax*nax, 1);
-VLL P;
-
-void init() {
-	p[0] = 0;
-	p[1] = 0;
-
-	for (ll x = 2; x < nax*nax; x++) {
-		if (p[x] == 0) {
-			continue;
-		}
-
-		P.push_back(x);
-		
-		for (ll f = x; x * f < nax * nax; f++) {
-			p[x*f] = 0;
-		}
-	}
-}
-
 void solve() {
-	
+	ll n, m;
+    cin >> n >> m;
+    map<string,ll> cnt;
+    REP(i,0,n) {
+        ll a;
+        string b;
+        cin >> a >> b;
+
+        if (a > 1) b = b.substr(0, b.length() - 1);
+
+        cnt[b] += a;
+    }
+    REP(i,0,m) {
+        ll a;
+        string b;
+        cin >> a >> b;
+
+        if (a > 1) b = b.substr(0, b.length() - 1);
+
+        if (cnt[b] < a) {
+            cout << "error" << endl;
+            return;
+        }
+        cnt[b] -= a;
+    }
+
+    ll ans = 0;
+    for (auto p : cnt) {
+        ans += p.second;
+    }
+
+    if (ans == 0) {
+        cout << "null" << endl;
+    } else if (ans == 1) {
+        cout << "item" << endl;
+    } else {
+        cout << "items" << endl;
+    }
 }
 
 signed main() {

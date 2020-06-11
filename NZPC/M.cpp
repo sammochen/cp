@@ -40,29 +40,53 @@ template <typename Head, typename... Tail> void in(Head & H, Tail & ... T) {in(H
 const ll inf = (ll)1e18 + 5;
 const ll mod = 1e9+7;
 
-ll nax = 1005;
-VLL p(nax*nax, 1);
-VLL P;
+ll n, a, b;
+VLL A, L, R;
 
-void init() {
-	p[0] = 0;
-	p[1] = 0;
+ll dp[3005][3005];
 
-	for (ll x = 2; x < nax*nax; x++) {
-		if (p[x] == 0) {
-			continue;
-		}
+ll get(ll i, ll j, ll k, ll rem) {
+	if (k == n) return 1;
+	if (i >= a && j >= b) return 0;
+	if (dp[i][j] != -1) return dp[i][j];
 
-		P.push_back(x);
-		
-		for (ll f = x; x * f < nax * nax; f++) {
-			p[x*f] = 0;
+
+	ll ans = 0;
+	if (i < a) {
+		if (L[i] < rem) {
+			ans |= get(i+1, j, k, rem-L[i]);
+		} else if (L[i] == rem) {
+			ans |= get(i+1, j, k+1, A[k+1]);
 		}
 	}
+
+	if (j < b) {
+		if (R[j] < rem) {
+			ans |= get(i, j+1, k, rem-R[j]);
+		} else if (R[j] == rem) {
+			ans |= get(i, j+1, k+1, A[k+1]);
+		}
+	}
+
+	dp[i][j] = ans;
+
+	return ans;
 }
 
 void solve() {
-	
+	mst(dp,-1);
+
+	in(n,a,b);
+	A.resize(n);
+	L.resize(a);
+	R.resize(b);
+	in(A, L, R);
+
+	A.push_back(0);
+
+	string ans = get(0,0,0,A[0]) ? "YES" : "NO";
+	cout << ans << endl;
+
 }
 
 signed main() {

@@ -21,6 +21,7 @@ string to_string(char c) {string s = string(1, c);return s;}
 template <typename A, typename B> string to_string(pair<A,B> p) { return "(" + to_string(p.first) + ", " + to_string(p.second) + ")"; }
 template <typename A> string to_string(vector<A> v) { string s = "("; int first = 1; for (A a : v) { if (!first) { s += ", "; } first = 0; s += to_string(a); } s += ")"; return s; }
 template <typename A> string to_string(set<A> v) { string s = "("; int first = 1; for (A a : v) { if (!first) { s += ", "; } first = 0; s += to_string(a); } s += ")"; return s; }
+template <typename A> string to_string(multiset<A> v) { string s = "("; int first = 1; for (A a : v) { if (!first) { s += ", "; } first = 0; s += to_string(a); } s += ")"; return s; }
 
 void debug_out() {cerr << endl;}
 template <typename Head, typename... Tail> void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...); }
@@ -40,29 +41,39 @@ template <typename Head, typename... Tail> void in(Head & H, Tail & ... T) {in(H
 const ll inf = (ll)1e18 + 5;
 const ll mod = 1e9+7;
 
-ll nax = 1005;
-VLL p(nax*nax, 1);
-VLL P;
+void solve() {
+	ll n, a, b;
+	in(n,a,b);
+	multiset<ll> ms;
+	REP(i,0,n) {
+		ll x;
+		in(x);
+		ms.insert(x);
+	}
 
-void init() {
-	p[0] = 0;
-	p[1] = 0;
+	ll ans = 0;
+	while (ms.size()) {
+		// take the biggest, and see how many it can shade
+		multiset<ll>::iterator it= --ms.end();
+		ll big = *it;
+		ms.erase(it);
 
-	for (ll x = 2; x < nax*nax; x++) {
-		if (p[x] == 0) {
-			continue;
-		}
+		// look for the biggest
+		REP(i,1,inf) {
+			ll diff = i*b/a;
+			if (diff * a != i*b) diff++;
+			ll h = big - diff;
+			
+			multiset<ll>::iterator small = ms.upper_bound(h);
+			if (small == ms.begin()) break;
+			small--;
+			ans++;
+			ms.erase(small);
 
-		P.push_back(x);
-		
-		for (ll f = x; x * f < nax * nax; f++) {
-			p[x*f] = 0;
 		}
 	}
-}
 
-void solve() {
-	
+	cout << ans << endl;
 }
 
 signed main() {

@@ -40,29 +40,73 @@ template <typename Head, typename... Tail> void in(Head & H, Tail & ... T) {in(H
 const ll inf = (ll)1e18 + 5;
 const ll mod = 1e9+7;
 
-ll nax = 1005;
-VLL p(nax*nax, 1);
-VLL P;
+ll pow(ll a, ll b) {
+	if (b == 0) return 1;
+	ll h = pow(a, b/2);
+	ll ans = b % 2 ? h * h % mod * a : h * h;
+	ans %= mod;
+	return ans;
+}
 
-void init() {
-	p[0] = 0;
-	p[1] = 0;
+ll inv(ll a) {
+	return pow(a,mod-2);
+}
 
-	for (ll x = 2; x < nax*nax; x++) {
-		if (p[x] == 0) {
-			continue;
-		}
-
-		P.push_back(x);
-		
-		for (ll f = x; x * f < nax * nax; f++) {
-			p[x*f] = 0;
-		}
+void multrow(VVLL & grid, ll row, ll k) {
+	REP(j,0,sz(grid[0])) {
+		grid[row][j] = grid[row][j] * k % mod;
 	}
 }
 
+// row1 is og, row2 should go to 0
+void makezero(VVLL & grid, ll row1, ll row2, ll k) {
+	REP(j,0,sz(grid[0])) {
+		grid[row2][j] = grid[row2][j] + grid[row1][j] % mod * k % mod;
+		grid[row2][j] %= mod;
+	}
+}
+
+
 void solve() {
-	
+	ll n;
+	in(n);
+	VLL A(n);
+	in(A);
+
+	VLL go(n+10);
+	REP(i,0,sz(go)) {
+		go[i] = i >= sz(A) ? sz(A) - 1 : A[i] == 0 ? i : A[i] - 1;
+	}
+
+	// i want to work out the expected number of turns to finish from 0
+
+	VVLL grid(n, VLL(n));
+
+	ll sixth = pow(6LL,mod-2);
+	REP(i,0,n-1) {
+		REP(j,1,7) {
+			grid[i][go[i+j]] = grid[i][go[i+j]] + sixth % mod;
+		}
+	}
+	REP(i,0,n) grid[i][i] = grid[i][i] - 1;
+	REP(i,0,n) grid[i][n-1] = 1;
+
+	VVLL x(n, VLL(1));
+	x[n-1][0] = 1;
+
+	REP(i,0,n) {
+		multrow(x, i, inv(grid[i][i]));
+		multrow(grid, i, inv(grid[i][i]));
+		
+		REP(j,0,n) {
+			if (i == j) continue;
+			makezero(x, i, j, mod-grid[j][i]);
+			makezero(grid, i, j, mod-grid[j][i]);
+		}
+	}
+
+	ll ans = x[0][0];
+	cout << ans << endl;
 }
 
 signed main() {

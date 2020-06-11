@@ -40,29 +40,77 @@ template <typename Head, typename... Tail> void in(Head & H, Tail & ... T) {in(H
 const ll inf = (ll)1e18 + 5;
 const ll mod = 1e9+7;
 
-ll nax = 1005;
-VLL p(nax*nax, 1);
-VLL P;
+ll m;
+VLL dx = {0,0,1,-1};
+VLL dy = {1,-1,0,0};
 
-void init() {
-	p[0] = 0;
-	p[1] = 0;
+PLL bfs(ll x, ll y, ll tx, ll ty) {
+	ll limit = 100;
+	
+	map<ll,map<ll,map<ll,ll>>> t, cnt;
+	queue<VLL> Q;
+	t[x][y][4] = 1;
+	cnt[x][y][4] = 1;
 
-	for (ll x = 2; x < nax*nax; x++) {
-		if (p[x] == 0) {
-			continue;
+	Q.push({x,y,4});
+
+	while (Q.size()) {
+		VLL at = Q.front();
+		Q.pop();
+
+		ll ti = t[at[0]][at[1]][at[2]];
+
+		if (at[0] == tx && at[1] == ty) {
+			limit = ti+5;
 		}
 
-		P.push_back(x);
-		
-		for (ll f = x; x * f < nax * nax; f++) {
-			p[x*f] = 0;
+		if (ti > limit) break;
+
+		REP(i,0,4) {
+			ll xx = at[0] + dx[i];
+			ll yy = at[1] + dy[i];
+			if (((ti+m-1) % m == 0) && (i == at[2])) continue;
+
+			// if this is the first itme seeing it
+			if (t[xx][yy][i] == 0) {
+				t[xx][yy][i] = ti+1;
+				cnt[xx][yy][i] = cnt[at[0]][at[1]][at[2]];
+				cnt[xx][yy][i] %= mod;
+				Q.push({xx,yy,i});
+			// multiple times seeing it
+			} else if (t[xx][yy][i] == ti + 1) {
+				cnt[xx][yy][i] += cnt[at[0]][at[1]][at[2]];
+				cnt[xx][yy][i] %= mod;
+			}
 		}
 	}
+
+	ll besttime = inf;
+	ll count = 0;
+	REP(j,0,5) {
+		if (t[tx][ty][j] == 0) continue;
+
+		if (t[tx][ty][j] < besttime) {
+			besttime = t[tx][ty][j];
+			count = 0;
+		}
+		if (t[tx][ty][j] == besttime) {
+			count += cnt[tx][ty][j];
+			count %= mod;
+		}
+	}
+	return {besttime - 1, count};
 }
 
+
 void solve() {
-	
+	ll x1, y1, x2, y2;
+	in(m);
+	in(x1,y1,x2,y2);
+
+	PLL ans = bfs(x1,y1,x2,y2);
+	cout << ans.first << ' ' << ans.second << endl;
+
 }
 
 signed main() {

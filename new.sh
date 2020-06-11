@@ -16,7 +16,10 @@ if [[ ! -e ./templates/$1.cpp ]] ; then
 	exit 1
 fi
 
-cp ./templates/$1.cpp $name".cpp"
+cp ./templates/include.cpp $name".cpp"
+cat ./templates/header.cpp >> $name".cpp"
+cat ./templates/$1.cpp >> $name".cpp"
+cat ./templates/og.cpp >> $name".cpp"
 
 
 

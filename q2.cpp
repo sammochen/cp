@@ -5,23 +5,21 @@ using namespace std;
 
 typedef long long ll;
 typedef double db;
-typedef vector<string> VS;
 typedef vector<int> VI;
 typedef vector<VI> VVI;
-typedef vector<ll> VLL; 
+typedef vector<ll> VLL;
 typedef vector<VLL> VVLL;
 typedef pair<ll,ll> PLL;
 typedef map<ll,ll> MLL;
 typedef set<ll> SLL;
 
-#define rep(x,l,u) for(ll x = l; x < u; x++)
-#define rrep(x,l,u) for(ll x = l; x >= u; x--)
-#define fe(x,a) for (auto x : a)
+#define REP(x,l,u) for(ll x = l; x < u; x++)
+#define RREP(x,l,u) for(ll x = l; x >= u; x--)
+#define FE(x,a) for (auto x : a)
 #define all(x) x.begin(), x.end()
 #define rall(x) x.rbegin(), x.rend()
 #define mst(x,v) memset(x, v, sizeof(x))
 #define sz(x) (ll)x.size()
-#define lg(x) (ll)x.length()
 #define fi first
 #define se second
 #define pb push_back
@@ -55,53 +53,70 @@ VLL dj = {1,-1,0,0,-1,-1,1,1};
 ll ob(ll i, ll n) { return i < 0 || i >= n; } // out of bounds
 ll tp(ll x) { return (1LL<<x); }
 ll roundup(ll a, ll b) { return a % b ? a/b + 1 : a/b; }
-template <typename A, typename B> ll exist(A a, B b) { return a.find(b) != a.end(); }
-vector<string> ssplit(string s) { vector<string> ans; stringstream ss; ss << s; while (ss >> s) ans.pb(s); return ans; }
 
 void upmin(ll & x, ll v) { x = min(x, v); }
 void upmax(ll & x, ll v) { x = max(x, v); }
 
-void dfs(ll at, ll prev, VVLL & E, VLL & tin, VLL & low, VLL & ans, ll & t, ll & root) {
-	tin[at] = t;
-	low[at] = t;
-	t++;
+ll test = 1;
+void solve() {
+	ll n, m;
+	cin >> n >> m;
 
-	ll k = 0;
-	fe(to, E[at]) {
-		if (tin[to] == -1) {
-			k++;
-			dfs(to, at, E, tin, low, ans, t, root);
-			upmin(low[at], low[to]);
+	map<ll,VLL> before;
 
-			if (at != root && low[to] >= tin[at]) {
-				ans[at] = 1;
-			} else if (at == root && k > 1) {
-				ans[at] = 1;
+	REP(i,0,n-1) {
+		ll x;
+		cin >> x;
+		if (x < 0) {
+			before[-x].pb(i+1);
+		} 
+	}
+
+	VVLL E(n);
+	vector<PLL> edges;
+	REP(i,0,m) {
+		ll a, b;
+		cin >> a >> b;
+		a--; b--;
+		E[a].pb(b);
+		E[b].pb(a);
+		edges.push_back({a,b});
+	}
+
+	VLL timein(n, -1);
+	timein[0] = 0;
+
+	ll curtime = 0;
+	REP(i,0,n+5) {
+		ll best = curtime;
+
+		FE(bef, before[i]) {
+			// i find the first time available
+			FE(node, E[bef]) {
+				upmax(best, timein[node]);
 			}
-		} else if (to != prev) {
-			upmin(low[at], tin[to]);
+			
 		}
-	}
-}
-
-VLL ap(VVLL & E) {
-	ll n = E.size();
-	ll t = 1;
-	VLL tin(n, -1), low(n, -1), ans(n);
-
-	rep(i,0,n) {
-		if (tin[i] == -1) {
-			dfs(i, -1, E, tin, low, ans, t, i);
+		FE(bef, before[i]) {
+			timein[bef] = best + 1;
 		}
+		
+		curtime = best + 2;
 	}
-	
-	return ans;
-}void solve() {
-	
+
+	VLL ans;
+	FE(edge, edges) {
+		ans.pb(abs(timein[edge.first] - timein[edge.second]));
+	}
+
+	printf("Case #%lld:", test++);
+	FE(x, ans) cout << ' ' << max(1LL, x);
+	cout << endl;
 }
 
 signed main() {
 	ll t = 1;
-	rep(i,0,t) solve();
+	cin >> t;
+	REP(i,0,t) solve();
 	return 0;
 }

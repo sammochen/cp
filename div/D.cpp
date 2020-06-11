@@ -40,29 +40,60 @@ template <typename Head, typename... Tail> void in(Head & H, Tail & ... T) {in(H
 const ll inf = (ll)1e18 + 5;
 const ll mod = 1e9+7;
 
-ll nax = 1005;
-VLL p(nax*nax, 1);
-VLL P;
-
-void init() {
-	p[0] = 0;
-	p[1] = 0;
-
-	for (ll x = 2; x < nax*nax; x++) {
-		if (p[x] == 0) {
-			continue;
-		}
-
-		P.push_back(x);
-		
-		for (ll f = x; x * f < nax * nax; f++) {
-			p[x*f] = 0;
-		}
-	}
+void bye() {
+    cout << "MISTAKE" << endl;
+    exit(0);
 }
 
 void solve() {
-	
+	ll n;
+    cin >> n;
+
+    VLL deg(1<<n);
+    vector<set<ll>> E(1<<n);
+
+    REP(i,0,(1<<n)-1) {
+        ll a, b;
+        cin >> a >> b;
+        a--;b--;
+        E[a].insert(b);
+        E[b].insert(a);
+
+        deg[a]++;
+        deg[b]++;
+    }
+
+    set<ll> layer;
+    REP(i,0,(1<<n)) layer.insert(i);
+
+    while (sz(layer) > 2) {
+        set<ll> next;
+        map<ll,ll> used;
+        
+        for (ll at : layer) {
+            if (deg[at] == 0) bye();
+            if (used[at]) continue;
+            if (deg[at] != 1) continue;
+
+            ll to = *E[at].begin();
+            if (used[to]) bye();
+            used[to] = 1;
+
+            deg[to]--;
+            E[to].erase(at);
+
+            next.insert(to);
+        }
+
+        layer = next;
+    }
+
+    if (sz(layer) != 2) bye();
+    for (ll x : layer) {
+        if (deg[x] != 1) bye();
+    }
+    
+    cout << "OK" << endl;
 }
 
 signed main() {

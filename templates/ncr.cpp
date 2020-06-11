@@ -30,6 +30,8 @@ typedef pair<ll,ll> PLL;
 const ll inf = (ll)1e18 + 5;
 ll nax = 1e5;
 ll mod = 1e9+7;
+
+
 VLL F(nax, -1);
 VLL INVF(nax, -1);
 

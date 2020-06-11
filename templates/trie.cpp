@@ -1,83 +1,20 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include "bits/stdc++.h"
-
-using namespace std;
-
-#define REP(x,l,u) for(ll x = l; x < u; x++)
-#define RREP(x,l,u) for(ll x = l; x >= u; x--)
-
-string to_string(string s) {return s;}
-string to_string(char c) {string s = string(1, c);return s;}
-template <typename A, typename B> string to_string(pair<A,B> p) { return "(" + to_string(p.first) + ", " + to_string(p.second) + ")"; }
-template <typename A> string to_string(vector<A> v) { string s = "("; int first = 1; for (A a : v) { if (!first) { s += ", "; } first = 0; s += to_string(a); } s += ")"; return s; }
-template <typename A> string to_string(set<A> v) { string s = "("; int first = 1; for (A a : v) { if (!first) { s += ", "; } first = 0; s += to_string(a); } s += ")"; return s; }
-
-void debug_out() {cerr << endl;}
-template <typename Head, typename... Tail> void debug_out(Head H, Tail... T) { cerr << " " << to_string(H); debug_out(T...); }
-
-#ifndef ONLINE_JUDGE
-#define debug(...) do { cerr << "[" << #__VA_ARGS__ << "]:", debug_out(__VA_ARGS__); } while (false)
-#else
-#define debug(...) do { } while (false)
-#endif
-
-typedef long long ll;
-typedef double db;
-typedef vector<ll> VLL;
-typedef vector<VLL> VVLL;
-typedef pair<ll,ll> PLL;
-
-const ll inf = (ll)1e18 + 5;
-
-struct trienode {
-	struct trienode *children[26];
+struct tnode {
+	tnode* children[26];
 	int endofword;
 };
 
-vector<trienode*> nodes;
-
-trienode *getNode(void) {
-	trienode *pnode = new trienode;
-	pnode->endofword = 0;
-	for (int i = 0; i < 26; i++) {
-		pnode->children[i] = NULL;
-	}
-	nodes.push_back(pnode);
-	return pnode;
-}
-
-void insert(trienode *root, string key) { 
-    trienode *crawl = root; 
-    for (int i = 0; i < key.length(); i++) { 
-        int index = key[i] - 'A'; 
-        if (!crawl->children[index]) {
-			crawl->children[index] = getNode(); 
+void insert(tnode *root, string key) { 
+    tnode *cur = root; 
+    rep(i,0,key.length()) {
+        ll index = key[i] - 'A'; 
+        if (!cur->children[index]) {
+			cur->children[index] = new tnode(); 
 		}
-        crawl = crawl->children[index]; 
+        cur = cur->children[index]; 
     } 
   
     // mark last node as leaf 
-    crawl->endofword = 1; 
-}
-
-bool search(trienode * root, int ind, string & key) {
-    if (root == NULL) return false;
-    if (ind == key.length()) {
-        if (root->endofword) return true;
-        return false;
-    }
-    
-    if (key[ind] == '.') {
-        for (int i = 0; i < 26; i++) {
-            if (search(root->children[i], ind+1, key)) return true;
-        }
-        return false;
-    } else {
-        return search(root->children[key[ind]-'a'], ind+1, key);
-    }
-    
-    
-    
+    cur->endofword = 1; 
 }
 
 void solve() {

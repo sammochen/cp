@@ -40,29 +40,37 @@ template <typename Head, typename... Tail> void in(Head & H, Tail & ... T) {in(H
 const ll inf = (ll)1e18 + 5;
 const ll mod = 1e9+7;
 
-ll nax = 1005;
-VLL p(nax*nax, 1);
-VLL P;
-
-void init() {
-	p[0] = 0;
-	p[1] = 0;
-
-	for (ll x = 2; x < nax*nax; x++) {
-		if (p[x] == 0) {
-			continue;
-		}
-
-		P.push_back(x);
-		
-		for (ll f = x; x * f < nax * nax; f++) {
-			p[x*f] = 0;
-		}
-	}
+void yes(ll & x) {
+    x %= mod;
+    x += mod;
+    x %= mod;
 }
 
+string s;
+VVLL dp;
+
+ll get(ll ind, ll one) {
+    if (ind == (ll)s.length()) {
+        if (one) return 0;
+        return 1;
+    }
+
+    if (dp[ind][one] != -1) return dp[ind][one];
+    ll ans = get(ind+1, one);
+    if (s[ind] - '0' == one) ans += get(ind+1, !one);
+
+    yes(ans);
+    dp[ind][one] = ans;
+    return ans;
+}
 void solve() {
-	
+    cin >> s;
+    dp.assign(s.length(), VLL(2, -1));
+
+    ll total = get(0,1);
+    for (char c : s) total -= c-'0';
+    yes(total);
+    cout << total << endl;
 }
 
 signed main() {

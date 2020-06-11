@@ -40,29 +40,76 @@ template <typename Head, typename... Tail> void in(Head & H, Tail & ... T) {in(H
 const ll inf = (ll)1e18 + 5;
 const ll mod = 1e9+7;
 
-ll nax = 1005;
-VLL p(nax*nax, 1);
-VLL P;
-
-void init() {
-	p[0] = 0;
-	p[1] = 0;
-
-	for (ll x = 2; x < nax*nax; x++) {
-		if (p[x] == 0) {
-			continue;
-		}
-
-		P.push_back(x);
-		
-		for (ll f = x; x * f < nax * nax; f++) {
-			p[x*f] = 0;
-		}
+ll both(VLL & A, ll p) {
+	ll i = 1, j = sz(A)-2;
+	REP(k,0,p) {
+		i++;
+		j--;
 	}
+
+	if (i >= j) return 0;
+	ll total = 0;
+	REP(k,i,j+1) {
+		total += A[k];
+	}
+	return total;
+}
+
+ll get(VLL & A, ll p) {
+	ll n = A.size();
+
+	VLL pre(n+1);
+	ll total = 0;
+	REP(i,0,n) {
+		total += A[i];
+		pre[i+1] = pre[i] + A[i];
+	}
+
+	if (sz(pre) <= p) return 0;
+	ll best = 0;
+	REP(i,0,p+1) {
+		ll cur = pre[min(n,2*i+1)];
+		ll other = pre[n] - pre[max(0LL,n-2*(p-i)-1)];
+		
+		best = max(best, cur+other);
+	}
+
+	return max(0LL, total - best);
 }
 
 void solve() {
-	
+	ll n, p;
+	string s;
+	in(n,p,s);
+
+	VLL seg;
+	ll cur = 1;
+	REP(i,1,n) {
+		if (s[i] != s[i-1]) {
+			seg.push_back(cur);
+			cur = 1;
+		} else {
+			cur++;
+		}
+	}
+	seg.push_back(cur);
+	ll m = sz(seg);
+	ll ans = get(seg, p);
+	if (m % 2) {
+		ans = min(ans, both(seg, p));
+	} else if (p > 0) {
+		VLL seg1, seg2;
+		REP(i,1,m) seg1.push_back(seg[i]);
+		seg1[0] += seg[0];
+
+		REP(i,0,m-1) seg2.push_back(seg[i]);
+		seg2[m-2] += seg[m-1];
+
+		ans = min({ans, both(seg1, p-1), both(seg2, p-1)});
+	} 
+
+	cout << ans << endl;
+
 }
 
 signed main() {

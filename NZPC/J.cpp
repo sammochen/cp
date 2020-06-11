@@ -40,33 +40,50 @@ template <typename Head, typename... Tail> void in(Head & H, Tail & ... T) {in(H
 const ll inf = (ll)1e18 + 5;
 const ll mod = 1e9+7;
 
-ll nax = 1005;
-VLL p(nax*nax, 1);
-VLL P;
+ll dp[505][505];
 
-void init() {
-	p[0] = 0;
-	p[1] = 0;
+ll get(ll i, ll j, string & s, string & t) {
+	if (i == s.length()) return t.length() - j;
+	if (j == t.length()) return s.length() - i;
+	if (dp[i][j] != -1) return dp[i][j];
 
-	for (ll x = 2; x < nax*nax; x++) {
-		if (p[x] == 0) {
-			continue;
-		}
+	ll ans = inf;
+	if (s[i] == t[j]) ans = min(ans, get(i+1, j+1, s, t));
+	ans = min(ans, get(i+1, j, s, t) + 1);
+	ans = min(ans, get(i+1, j+1, s, t) + 1);
+	ans = min(ans, get(i, j+1, s, t) + 1);
 
-		P.push_back(x);
-		
-		for (ll f = x; x * f < nax * nax; f++) {
-			p[x*f] = 0;
-		}
-	}
+	dp[i][j] = ans;
+	return ans;
+}
+
+ll edit(string & s, string & t) {
+	mst(dp, -1);
+	return get(0,0,s,t);
+}
+
+string line() {
+	string s;
+	getline(cin, s);
+	return s;
 }
 
 void solve() {
-	
+	char c = line()[0];
+	string s = line();
+	string t = line();
+
+	ll a = edit(s,t);
+	REP(i,0,t.length()) {
+		if (t[i] == c) t[i] = '@';
+	}
+	ll b = edit(s,t);
+	printf("Differences %lld and %lld\n", a, b);
 }
 
 signed main() {
 	ll t = 1;
+	t = stoll(line());
 	REP(i,0,t) solve();
 	return 0;
 }

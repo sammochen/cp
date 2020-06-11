@@ -1,9 +1,10 @@
 #!/bin/bash
 
-./compile.sh
+rm a.out
+g++ -std=c++14 A.cpp 
 
 if [ $# == 0 ] ; then
-    for file in $(echo in*)
+    for file in $(echo *.in)
     do
 	    cat $file | ./a.out
     done

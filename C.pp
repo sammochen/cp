@@ -15,6 +15,9 @@ typedef pair<ll,ll> PLL;
 #define rall(x) x.rbegin(), x.rend()
 #define mst(x,v) memset(x, v, sizeof(x))
 #define sz(x) (ll)x.size()
+#define fi first
+#define se second
+#define pb push_back
 
 string to_string(string s) {return s;}
 string to_string(char c) {string s = string(1, c);return s;}
@@ -38,35 +41,61 @@ template <typename Head, typename... Tail> void in(Head & H, Tail & ... T) {in(H
 #endif
 
 const ll inf = (ll)1e18 + 5;
-const ll mod = 1e9+7;
 
-ll nax = 1005;
-VLL p(nax*nax, 1);
-VLL P;
+VLL di = {0,0,1,-1,1,-1,1,-1};
+VLL dj = {1,-1,0,0,-1,-1,1,1};
+ll ob(ll i, ll n) { return i < 0 || i >= n; } // out bound
 
-void init() {
-	p[0] = 0;
-	p[1] = 0;
-
-	for (ll x = 2; x < nax*nax; x++) {
-		if (p[x] == 0) {
-			continue;
-		}
-
-		P.push_back(x);
-		
-		for (ll f = x; x * f < nax * nax; f++) {
-			p[x*f] = 0;
-		}
-	}
-}
-
+ll test = 1;
 void solve() {
-	
+    ll n, k, ans = inf;
+    cin >> n >> k;
+    VLL A(n);
+    in(A);
+    
+    map<ll,ll> freq;
+    ll big = 0;
+    REP(i,0,n) {
+        freq[A[i]]++;
+        big = max(big, freq[A[i]]);
+    }
+
+    if (k <= big) {
+        ans = 0;
+        printf("Case #%lld: %lld\n", test++, ans);
+        return;
+    }
+
+    // the slice could be any size - any number divided by 50
+    
+
+    if (k == 2) {
+        ans = 1;
+        printf("Case #%lld: %lld\n", test++, ans);
+        return;
+    }
+
+    if (k == 3) {
+        ans = 2;
+        sort(all(A));
+        ll smallesttwo = inf;
+        REP(i,0,n) {
+            if (A[i] % 2 == 0 && freq[A[i]/2]) {
+                ans = min(ans, 1LL);
+            }
+            if (freq[A[i]] == 2) smallesttwo = min(smallesttwo, A[i]);
+            if (A[i] > smallesttwo) ans = min(ans, 1LL);
+        }
+        printf("Case #%lld: %lld\n", test++, ans);
+        return;
+    }
+
+    
 }
 
 signed main() {
 	ll t = 1;
+	cin >> t;
 	REP(i,0,t) solve();
 	return 0;
 }

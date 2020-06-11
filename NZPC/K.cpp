@@ -40,29 +40,95 @@ template <typename Head, typename... Tail> void in(Head & H, Tail & ... T) {in(H
 const ll inf = (ll)1e18 + 5;
 const ll mod = 1e9+7;
 
-ll nax = 1005;
-VLL p(nax*nax, 1);
-VLL P;
+struct strip {
+	ll l, r, w;
+};
 
-void init() {
-	p[0] = 0;
-	p[1] = 0;
+string to_string(strip s) {
+	VLL A = {s.l, s.r, s.w};
+	return to_string(A);
+}
 
-	for (ll x = 2; x < nax*nax; x++) {
-		if (p[x] == 0) {
-			continue;
-		}
-
-		P.push_back(x);
-		
-		for (ll f = x; x * f < nax * nax; f++) {
-			p[x*f] = 0;
+vector<strip> foldleft(vector<strip> width, ll fold) {
+	vector<strip> folded;
+	for (strip s : width) {
+		if (s.l < fold && s.r > fold) {
+			folded.push_back({0, fold - s.l, s.w});
+			folded.push_back({0, s.r - fold, s.w});
+		} else if (s.l < fold) {
+			folded.push_back({fold - s.r, fold - s.l, s.w});
+		} else {
+			folded.push_back({s.l - fold, s.r - fold, s.w});
 		}
 	}
+	return folded;
+}
+
+vector<strip> flip(vector<strip> width, ll big) {
+	vector<strip> folded;
+	for (strip s : width) {
+		folded.push_back({big-s.r, big-s.l, s.w});
+	}
+	return folded;
+}
+vector<strip> foldright(vector<strip> width, ll fold, ll big) {
+	return flip(foldleft(flip(width, big), fold), big);
 }
 
 void solve() {
-	
+	ll w, h, f, p;
+	while (cin >> w >> h >> f >> p, w||h||f||p) {
+		vector<strip> width = {{0,w,1}};
+		vector<strip> height = {{0,h,1}};
+
+		REP(i,0,f) {
+			string s;
+			in(s);
+			char c = s[0];
+			ll d = stoll(s.substr(1));
+			if (c == 'L') {
+				width = foldleft(width, d);
+				w = max(w-d,d);
+			} else if (c == 'R') {
+				width = flip(width, w);
+				width = foldleft(width, d);
+				
+				w = max(w-d,d);
+				width = flip(width, w);
+			} else if (c == 'T') {
+				height = foldleft(height, d);
+				h = max(h-d,d);
+			} else if (c == 'B') {
+				height = flip(height, h);
+				height = foldleft(height, d);
+				
+				h = max(h-d,d);
+				height = flip(height, h);
+			} else {
+				assert(0);
+			}
+		}
+		//debug(width, height);
+
+		REP(i,0,p) {
+			ll a, b;
+			in(a,b);
+
+			ll W = b-1;
+			ll H = a-1;
+
+			ll wm = 0;
+			ll hm = 0;
+			for (strip s : width) {
+				if (s.l <= W && W < s.r) wm += s.w;
+			}
+			for (strip s : height) {
+				if (s.l <= H && H < s.r) hm += s.w;
+			}
+			
+			cout << wm * hm << endl;
+		}
+	}
 }
 
 signed main() {
