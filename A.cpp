@@ -61,42 +61,18 @@ vector<string> ssplit(string s) { vector<string> ans; stringstream ss; ss << s; 
 void upmin(ll & x, ll v) { x = min(x, v); }
 void upmax(ll & x, ll v) { x = max(x, v); }
 
-void dfs(ll at, ll prev, VVLL & E, VLL & tin, VLL & low, VLL & ans, ll & t, ll & root) {
-	tin[at] = t;
-	low[at] = t;
-	t++;
-
-	ll k = 0;
-	fe(to, E[at]) {
-		if (tin[to] == -1) {
-			k++;
-			dfs(to, at, E, tin, low, ans, t, root);
-			upmin(low[at], low[to]);
-
-			if (at != root && low[to] >= tin[at]) {
-				ans[at] = 1;
-			} else if (at == root && k > 1) {
-				ans[at] = 1;
-			}
-		} else if (to != prev) {
-			upmin(low[at], tin[to]);
-		}
-	}
+void in(string & s) {
+	char buf[100]; // note the 100 limit
+	ll a = scanf("%99s", buf);
+	s = buf;
 }
 
-VLL ap(VVLL & E) {
-	ll n = E.size();
-	ll t = 1;
-	VLL tin(n, -1), low(n, -1), ans(n);
+void in(ll & x) { a = scanf("%lld", &x); }
 
-	rep(i,0,n) {
-		if (tin[i] == -1) {
-			dfs(i, -1, E, tin, low, ans, t, i);
-		}
-	}
-	
-	return ans;
-}void solve() {
+template <typename A, typename B> void in(A & a, B & b) { in(a); in(b); }
+template <typename A, typename B, typename C> void in(A & a, B & b, C & c) { in(a); in(b); in(c); }
+
+void solve() {
 	
 }
 

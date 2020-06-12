@@ -1,8 +1,11 @@
 #!/bin/bash
 
 if [[ $# -eq 0 ]] ; then
-	echo "didnt work"
-	exit 1
+	cp ./templates/include.cpp A.cpp
+	cat ./templates/header.cpp >> A.cpp
+	cat ./templates/og.cpp >> A.cpp
+	
+	exit 0
 fi
 
 name="A"

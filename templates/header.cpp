@@ -56,3 +56,14 @@ vector<string> ssplit(string s) { vector<string> ans; stringstream ss; ss << s; 
 void upmin(ll & x, ll v) { x = min(x, v); }
 void upmax(ll & x, ll v) { x = max(x, v); }
 
+void in(string & s) {
+	char buf[100]; // note the 100 limit
+	ll a = scanf("%99s", buf);
+	s = buf;
+}
+
+void in(ll & x) { a = scanf("%lld", &x); }
+
+template <typename A, typename B> void in(A & a, B & b) { in(a); in(b); }
+template <typename A, typename B, typename C> void in(A & a, B & b, C & c) { in(a); in(b); in(c); }
+
