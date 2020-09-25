@@ -17,13 +17,3 @@ void insert(tnode *root, string key) {
     cur->endofword = 1; 
 }
 
-void solve() {
-
-}
-
-signed main() {
-	ll t = 1;
-	cin >> t;
-	REP(i,0,t) solve();
-	return 0;
-}

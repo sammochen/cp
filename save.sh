@@ -24,12 +24,12 @@ else
 	exit 1
 fi
 
-cp A.cpp ~/problem-solving/$folder/$2.cpp
+cp A.cpp ../cp-submissions/$folder/$2.cpp
 
 message=$(echo added $2)
 echo $message
 
-cd ~/problem-solving
+cd ../cp-submissions
 git add .
 git commit -m "$(echo $message)"
 git push

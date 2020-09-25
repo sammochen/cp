@@ -22,7 +22,7 @@ void init() {
 
 map<ll,ll> pf(ll x) {
     map<ll,ll> f;
-    REP(i,0,sz(P)) {
+    rep(i,0,sz(P)) {
         if (P[i] * P[i] > x) break;
         while (x % P[i] == 0) {
             f[P[i]]++;

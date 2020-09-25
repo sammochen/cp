@@ -1,3 +1,4 @@
+
 VLL par; 
 
 ll getp(ll x) {
@@ -17,15 +18,6 @@ void merge(ll a, ll b) {
 
 void init(ll n) {
 	par.resize(n);
-	REP(i,0,n) par[i] = i;
+	rep(i,0,n) par[i] = i;
 }
 
-void solve() {
-
-}
-
-signed main() {
-	ll t = 1;
-	REP(i,0,t) solve();
-	return 0;
-}
