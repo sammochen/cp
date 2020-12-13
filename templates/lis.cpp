@@ -28,13 +28,3 @@ ll lis(VLL & A) {
 	
 	return tails.size();
 }
-
-void solve() {
-
-}
-
-signed main() {
-	ll t = 1;
-	REP(i,0,t) solve();
-	return 0;
-}

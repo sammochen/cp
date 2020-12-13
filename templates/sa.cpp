@@ -75,6 +75,6 @@ void suffixarray(string & s) {
 		}
 		lcp[index] = res;
 
-		if (res) res--;
+		if (res) res--;	
 	}
 }

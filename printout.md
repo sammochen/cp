@@ -1,3 +1,31 @@
+# simple.cpp
+
+```c++
+#define _CRT_SECURE_NO_WARNINGS
+#include "bits/stdc++.h"
+
+using namespace std;
+typedef long long ll;
+typedef double db;
+typedef vector<string> VS;
+typedef vector<ll> VLL; 
+typedef vector<VLL> VVLL;
+
+#define rep(x,l,u) for(ll x = l; x < u; x++)
+#define rrep(x,l,u) for(ll x = l; x >= u; x--)
+#define sz(x) (ll)x.size()
+
+void solve() {
+	
+}
+
+signed main() {
+	ll t = 1;
+	rep(i,0,t) solve();
+	return 0;
+}
+```
+
 # template.cpp
 
 ```c++
