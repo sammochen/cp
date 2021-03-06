@@ -1,4 +1,8 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include "bits/stdc++.h"
+#ifdef SAM
+#include "stdc++.h"
+#else
+#include <bits/stdc++.h>
+#endif
 
 using namespace std;
+

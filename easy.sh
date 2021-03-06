@@ -1,7 +1,7 @@
 #!/bin/bash
 
 rm a.out
-g++ -std=c++14 A.cpp 
+g++ -std=c++14 -DSAM A.cpp 
 
 if [ $# == 0 ] ; then
     for file in $(echo *.in)
