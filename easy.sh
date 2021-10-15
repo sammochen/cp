@@ -1,5 +1,9 @@
 #!/bin/bash
-./_compile.sh
+echo "> Easy - yes debug"
+
+rm a.out
+g++ -std=c++11 -DSAM A.cpp 
+
 if [ $? -ne 0 ] ; then
     exit 1
 fi
