@@ -1,85 +1,96 @@
 
-namespace maxFlow {
-    const ll maxn = 350, maxe = 10010, source = maxn - 1, sink = maxn - 2;
-    ll cnt = 0;
-    
-    struct edge {
-        ll from, to, cap;
-        
-        edge(ll a, ll b, ll c) : from(a), to(b), cap(c) {}
-        
-        edge() {
-            from = to = cap = 0;
-        }
-    };
-    
-    vector<ll> g[maxn];
-    edge e[maxe];
-    
-    void clear() {
-        cnt = 0;
-        REP(i, 0, maxn) g[i].clear();
-        REP(i, 0, maxe) e[i] = edge();
-    }
-    
-    void addEdge(ll u, ll v, ll cap) {
-        ll cur = cnt;
-        e[cur] = edge(u, v, cap);
-        g[u].push_back(cur);
-        e[cur ^ 1] = edge(v, u, 0);
-        g[v].push_back(cur ^ 1);
-        cnt += 2;
-    }
-    
-    ll lvl[maxn], cur[maxn];
-    
-    bool bfs(ll start = source) {
-        memset(lvl, -1, sizeof(lvl));
-        memset(cur, 0, sizeof(cur));
-        lvl[start] = 0;
-        queue <ll> q;
-        q.push(start);
-        
-        while (q.size()) {
-            ll f = q.front();
-            q.pop();
-            for (auto curEdge:g[f]) {
-                auto &E = e[curEdge];
-                if (E.cap) {
-                    if (lvl[E.to] == -1) {
-                        lvl[E.to] = lvl[f] + 1;
-                        q.push(E.to);
-                    }
+namespace Dinic {
+struct edge {
+    ll from, to, cap;
+    edge(ll a, ll b, ll c) : from(a), to(b), cap(c) {}
+    edge() : from(0), to(0), cap(0) {}
+};
+
+const ll NAX = 450, MAX = 20050, SOURCE = NAX - 1, SINK = NAX - 2;
+ll cnt = 0;
+
+vector<ll> g[NAX];  // g keeps the indices of the edges
+edge e[MAX];
+
+// Resets everything
+void clear() {
+    cnt = 0;
+    rep(i, 0, NAX) g[i].clear();
+    rep(i, 0, MAX) e[i] = edge();
+}
+
+// Adds an edge from u to v with cap
+void addEdge(ll u, ll v, ll cap) {
+    // e[cnt] is the current edge and e[cnt^1] is the inverse edge
+    e[cnt] = edge(u, v, cap);
+    g[u].push_back(cnt);
+
+    e[cnt ^ 1] = edge(v, u, 0);
+    g[v].push_back(cnt ^ 1);
+
+    cnt += 2;
+}
+
+ll lvl[NAX];  // Level graph of BFS. Distance from source.
+ll dfsStart[NAX];
+
+// Performs BFS from source. Returns true if there is a path
+bool bfs(ll start = SOURCE) {
+    memset(lvl, -1, sizeof(lvl));
+    memset(dfsStart, 0, sizeof(dfsStart));
+
+    lvl[start] = 0;
+    queue<ll> Q;
+    Q.push(start);
+
+    while (Q.size()) {
+        ll at = Q.front();
+        Q.pop();
+
+        // For each edge outwards
+        for (auto to : g[at]) {  // 'to' is the index
+            auto& E = e[to];
+            if (E.cap > 0) {  // If there is an edge
+                if (lvl[E.to] == -1) {
+                    lvl[E.to] = lvl[at] + 1;
+                    Q.push(E.to);
                 }
             }
         }
-        
-        return lvl[sink] != -1;
     }
-    
-    
-    ll dfs(ll curNode, ll curCap) {
-        if (!curCap || curNode == sink)return curCap;
-        ll ans = 0;
-        for (ll &i = cur[curNode]; i < g[curNode].size(); i++) {
-            ll curEdge = g[curNode][i];
-            if (lvl[e[curEdge].to] > lvl[curNode]) {
-                ll delta = dfs(e[curEdge].to, min(e[curEdge].cap, curCap));
-                ans += delta;
-                curCap -= delta;
-                e[curEdge].cap -= delta;
-                e[curEdge ^ 1].cap += delta;
-                if (!curCap)break;
-            }
-        }
-        return ans;
-    }
-    
-    ll dinic() {
-        ll ans = 0;
-        while (bfs()) {
-            ans += (dfs(source, inf));
-        }
-        return ans;
-    }
+    return lvl[SINK] != -1;
 }
+
+// Performs DFS. This step brute force goes through the graph and sees if some
+// flow can go from the source to the sink If there is ever a path from source
+// to sink, it returns the cap and updates
+ll dfs(ll at, ll cap) {
+    if (cap == 0 || at == SINK) return cap;
+
+    ll ans = 0;
+    // For each edge (no repeat edges, ever)
+    for (; dfsStart[at] < g[at].size(); dfsStart[at]++) {
+        ll to = g[at][dfsStart[at]];
+
+        // If the next vertex is positive in distance
+        if (lvl[e[to].to] == lvl[at] + 1) {
+            // The cap if we continue there
+            ll delta = dfs(e[to].to, min(e[to].cap, cap));
+            ans += delta;
+            cap -= delta;
+            e[to].cap -= delta;
+            e[to ^ 1].cap += delta;
+            if (cap == 0) break;
+        }
+    }
+    return ans;
+}
+
+ll dinic() {
+    ll ans = 0;
+    while (bfs()) {
+        ans += (dfs(SOURCE, inf));
+    }
+    return ans;
+}
+}  // namespace Dinic

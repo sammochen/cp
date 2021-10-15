@@ -73,4 +73,4 @@ const db eps = 1e-10;
 const db pi = acos(0) * 2;
 const string nl = "\n";
 
-
+// clang-format on

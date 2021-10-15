@@ -1,8 +1,6 @@
-#ifdef SAM
-#include "stdc++.h"
-#else
+// clang-format off
+
 #include <bits/stdc++.h>
-#endif
 
 using namespace std;
 

@@ -6,11 +6,11 @@ struct todo {
     ll v, d;
 };
 
-bool operator<(const todo & a, const todo & b) {
+bool operator<(const todo& a, const todo& b) {
     return a.d > b.d;
 }
 
-VLL dijkstra(vector<vector<edge>> & E, ll s) {
+VLL dijkstra(vector<vector<edge>>& E, ll s) {
     VLL d(E.size(), inf);
     d[s] = 0;
     priority_queue<todo> pq;
@@ -30,4 +30,3 @@ VLL dijkstra(vector<vector<edge>> & E, ll s) {
 
     return d;
 }
-

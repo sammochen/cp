@@ -1,10 +1,11 @@
-void solve() {
-	
-}
+void solve() {}
 
 signed main() {
-	ll t = 1;
-	// cin >> t;
-	rep(i,0,t) solve();
-	return 0;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    ll t = 1;
+    // cin >> t;
+    rep(i, 0, t) solve();
+    return 0;
 }

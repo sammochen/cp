@@ -1,20 +1,24 @@
 ll nax = 1005;
-VLL p(nax*nax, 1);
-VLL P;
+VLL pp(nax* nax, -1);
 
 void init() {
-	p[0] = 0;
-	p[1] = 0;
+    for (ll x = 2; x < nax * nax; x++) {
+        if (pp[x] != -1) {
+            continue;
+        }
+        pp[x] = x;
 
-	for (ll x = 2; x < nax*nax; x++) {
-		if (p[x] == 0) {
-			continue;
-		}
+        for (ll f = x; x * f < nax * nax; f++) {
+            pp[x * f] = x;
+        }
+    }
+}
 
-		P.push_back(x);
-		
-		for (ll f = x; x * f < nax * nax; f++) {
-			p[x*f] = 0;
-		}
-	}
+VLL pf(ll x) {
+    VLL ans;
+    while (x > 1) {
+        ans.pb(pp[x]);
+        x /= pp[x];
+    }
+    return ans;
 }

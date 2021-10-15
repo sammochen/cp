@@ -1,19 +1,18 @@
 struct tnode {
-	tnode* children[26];
-	int endofword;
+    tnode *children[26];
+    int isEnd = 0;
 };
 
-void insert(tnode *root, string key) { 
-    tnode *cur = root; 
-    rep(i,0,key.length()) {
-        ll index = key[i] - 'A'; 
+void insert(tnode *root, const string &key) {
+    tnode *cur = root;
+    rep(i, 0, lg(key)) {
+        ll index = key[i] - 'A';
         if (!cur->children[index]) {
-			cur->children[index] = new tnode(); 
-		}
-        cur = cur->children[index]; 
-    } 
-  
-    // mark last node as leaf 
-    cur->endofword = 1; 
-}
+            cur->children[index] = new tnode();
+        }
+        cur = cur->children[index];
+    }
 
+    // mark last node as leaf
+    cur->isEnd = 1;
+}
