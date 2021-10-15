@@ -1,3 +1,9 @@
+// clang-format off
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
 typedef long long ll;
 typedef double db;
 typedef vector<string> VS;

@@ -1,17 +1,12 @@
 #!/bin/bash
 
+name="A.cpp"
+
 if [[ $# -eq 0 ]] ; then
-	cp ./templates/include.cpp A.cpp
-	cat ./templates/header.cpp >> A.cpp
-	cat ./templates/og.cpp >> A.cpp
+	cp ./body/defs.cpp $name
+	cat ./body/main.cpp >> $name
 	
 	exit 0
-fi
-
-name="A"
-
-if [[ $# -eq 2 ]] ; then
-	name=$2
 fi
 
 if [[ ! -e ./templates/$1.cpp ]] ; then
@@ -19,10 +14,9 @@ if [[ ! -e ./templates/$1.cpp ]] ; then
 	exit 1
 fi
 
-cp ./templates/include.cpp $name".cpp"
-cat ./templates/header.cpp >> $name".cpp"
-cat ./templates/$1.cpp >> $name".cpp"
-cat ./templates/og.cpp >> $name".cpp"
+cp ./body/defs.cpp $name
+cat ./templates/$1.cpp >> $name
+cat ./body/main.cpp >> $name
 
 
 
