@@ -46,12 +46,12 @@ struct DEBUG {
 	template <typename A, typename B> string f(pair<A,B> p) { return open + f(p.first) + sep + f(p.second) + close; }
 	template <typename A> string f(A v) { string s = open; for (auto a : v) { if (s != open) { s += sep; } s += f(a); } s += close; return s; } 
 
-	void show() {cout << endl;}
-	template <typename Head, typename... Tail> void show(Head H, Tail... T) { cout << " " << f(H); show(T...); }
+	void show() {cerr << endl;}
+	template <typename Head, typename... Tail> void show(Head H, Tail... T) { cerr << " " << f(H); show(T...); }
 };
 
 #ifdef SAM
-#define debug(...) do { DEBUG deb; cout << "[" << #__VA_ARGS__ << "]:", deb.show(__VA_ARGS__); } while (false)
+#define debug(...) do { DEBUG deb; cerr << "[" << #__VA_ARGS__ << "]:", deb.show(__VA_ARGS__); } while (false)
 #else
 #define debug(...) do {} while (false)
 #endif
@@ -68,11 +68,12 @@ void makemod(ll & x, ll m) { x %= m; x += m; x %= m; }
 ll powmod(ll a, ll b, ll m) { if (b == 0) return 1;	ll h = powmod(a, b/2, m); ll ans = h*h%m; return b%2 ? ans*a%m : ans; }
 bool isvowel(char ch) { return (ch=='a' || ch=='e' || ch=='i' || ch=='o' || ch=='u'); }
 ll sign(ll x) {	return x > 0 ? 1 : x < 0 ? -1 : 0; }
+template<typename A> A reversed(const A & a) { A b = a; reverse(all(b)); return b; }
 
 template<typename A, typename B> void upmin(A & x, B v) { x = min(x, (A)v); }
 template<typename A, typename B> void upmax(A & x, B v) { x = max(x, (A)v); }
 
-const VLL mods = {(ll)1e9 + 7, 998244353, (ll)1e6 + 3, (ll)1e18 + 5};
+const VLL mods = {(ll)1e9 + 7, 998244353, (ll)1e6 + 3, (ll)1e18 + 5, 1000000207};
 const ll mod = mods[0];
 const ll inf = mods[3];
 const db eps = 1e-10;

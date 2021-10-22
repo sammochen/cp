@@ -1,29 +1,39 @@
 struct hasher {
     string s;
-    ll mod;
-    ll seed = 31;
-    VLL pow, val;
+    ll mod, seed = 31;
+    /**
+     * [3,2,1,4], seed = 10
+     * pre = [0,3,23,123,4123]
+     */
+    VLL pow, pre;
 
-    ll toll(char c) {
-        return c - 'a' + 1;
+    ll get_value(char c) {
+        ll value = c - 'a' + 1;
+        assert(value > 0 && value < seed);
+        return value;
     }
-    hasher(string str, ll m = 1000000207) {
-        s = str;
-        mod = m;
 
-        pow.resize(s.length() + 1);
-        val.resize(s.length() + 1);
+    hasher(const string& s, ll mod) {
+        this->s = s;
+        this->mod = mod;
+        ll n = lg(s);
+        pow.resize(n + 1);
+        pre.resize(n + 1);
+
         pow[0] = 1;
-        rep(i, 0, s.length()) {
-            val[i + 1] = (val[i] + toll(s[i]) * pow[i] % mod) % mod;
-            pow[i + 1] = (pow[i] * seed) % mod;
+        rep(i, 0, n) {
+            pow[i + 1] = pow[i] * seed % mod;
+            pre[i + 1] = pre[i] + get_value(s[i]) * pow[i];
         }
     }
 
-    ll f(ll i, ll j) {
-        ll diff = (val[j + 1] - val[i] + mod) % mod;
-        // times this by how far away i is!
-        diff *= pow[s.length() - i];
+    ll substr_hash(ll i, ll j) {
+        ll n = lg(s);
+        assert(!ob(i, n) && !ob(j, n));
+
+        ll diff = pre[j + 1] - pre[i];
+        makemod(diff, mod);
+        diff *= powmod(pow[i], mod - 2, mod);
         diff %= mod;
         return diff;
     }
