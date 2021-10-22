@@ -75,6 +75,7 @@ void buildLCP(const string& s, ll sa[], ll ind[], ll lcp[]) {
     // kasai's algorithm, find lcp
     // uses the idea that lcp[i+1] will be at least lcp[i] - 1
     ll n = lg(s);
+    rep(i, 0, n) lcp[i] = 0;
 
     ll res = 0;
     rep(i, 0, n - 1) {
