@@ -1,28 +1,26 @@
-class DSU {
-   public:
-    DSU(int n) {
-        init(n);
-    }
-    vector<int> par;
 
-    void init(int n) {
+struct DSU {
+    const ll n;
+    VLL par;
+
+    DSU(ll n) : n(n) {
         par.resize(n);
-        for (int i = 0; i < n; i++) {
+        rep(i, 0, n) {
             par[i] = i;
         }
     }
 
-    int getp(int x) {
+    ll root(ll x) {
         if (par[x] == x) return x;
-        return par[x] = getp(par[x]);
+        return par[x] = root(par[x]);
     }
 
-    int same(int a, int b) {
-        return getp(a) == getp(b);
+    ll same(ll a, ll b) {
+        return root(a) == root(b);
     }
 
-    void merge(int a, int b) {
+    void merge(ll a, ll b) {
         if (same(a, b)) return;
-        par[getp(b)] = getp(a);
+        par[root(b)] = root(a);
     }
 };

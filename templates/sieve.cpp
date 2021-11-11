@@ -1,24 +1,23 @@
-ll nax = 1005;
-VLL pp(nax* nax, -1);
+
+namespace Sieve {
+const ll nax = 1005;
+ll prevPrime[nax * nax];
 
 void init() {
+    mst(prevPrime, -1);
     for (ll x = 2; x < nax * nax; x++) {
-        if (pp[x] != -1) {
-            continue;
-        }
-        pp[x] = x;
+        // not prime
+        if (prevPrime[x] != -1) continue;
 
+        // is prime
+        prevPrime[x] = x;
         for (ll f = x; x * f < nax * nax; f++) {
-            pp[x * f] = x;
+            prevPrime[x * f] = x;
         }
     }
 }
 
-VLL pf(ll x) {
-    VLL ans;
-    while (x > 1) {
-        ans.pb(pp[x]);
-        x /= pp[x];
-    }
-    return ans;
+ll isprime(ll x) {
+    return prevPrime[x] == x;
 }
+}  // namespace Sieve
