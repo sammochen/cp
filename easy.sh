@@ -2,7 +2,7 @@
 echo "> Easy - yes debug"
 
 rm a.out
-g++ -std=c++14 -O2 -DSAM A.cpp 
+g++ -std=c++14 -DSAM A.cpp 
 
 if [ $? -ne 0 ] ; then
     exit 1

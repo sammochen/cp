@@ -1,32 +1,42 @@
-struct edge {
-    ll to, d;
-};
+namespace Path {
+VLL d;    // dist
+VLL cnt;  // num ways to get there in shortest time
 
-struct todo {
-    ll v, d;
-};
+void build(vector<vector<PLL>>& E, ll s) {
+    ll n = E.size();
 
-bool operator<(const todo& a, const todo& b) {
-    return a.d > b.d;
-}
+    // edge PLL: to, weight
+    // todo PLL: dist, at
 
-VLL dijkstra(vector<vector<edge>>& E, ll s) {
-    VLL d(E.size(), inf);
+    // init structures
+    d.assign(n, inf);
+    cnt.assign(n, -1);
+    set<PLL> pq;  // dist, at
+
+    // init s
     d[s] = 0;
-    priority_queue<todo> pq;
-
-    pq.push({s, 0});
+    cnt[0] = 1;
+    pq.insert({0, s});
     while (pq.size()) {
-        todo t = pq.top();
-        pq.pop();
+        const auto t = *pq.begin();
+        pq.erase(t);
 
-        for (edge e : E[t.v]) {
-            if (d[t.v] + e.d < d[e.to]) {
-                pq.push({e.to, d[t.v] + e.d});
-                d[e.to] = d[t.v] + e.d;
+        const ll dist = t.first;
+        const ll at = t.second;
+
+        for (const auto& edge : E[at]) {
+            const ll to = edge.first;
+            const ll weight = edge.second;
+
+            if (dist + weight < d[to]) {
+                pq.insert({dist + weight, to});
+                d[to] = dist + weight;
+                cnt[to] = cnt[at];
+            } else if (dist + weight == d[to]) {
+                cnt[to] += cnt[at];
+                cnt[to] %= mod;
             }
         }
     }
-
-    return d;
 }
+}  // namespace Path

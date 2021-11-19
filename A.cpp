@@ -79,6 +79,8 @@ ll powmod(ll a, ll b, ll m) { if (b == 0) return 1;	ll h = powmod(a, b/2, m); ll
 template<typename A, typename B> void upmin(A & x, B v) { x = min(x, (A)v); }
 template<typename A, typename B> void upmax(A & x, B v) { x = max(x, (A)v); }
 
+template <typename A, typename B> bool exist(const A& a, const B& b) { return a.find(b) != a.end(); }
+
 const VLL di = {0, 0, 1, -1, 1, -1, 1, -1};
 const VLL dj = {1, -1, 0, 0, -1, -1, 1, 1};
 const VLL mods = {(ll)1e9 + 7, 998244353, (ll)1e6 + 3, (ll)1e18 + 5, 1000000207};
@@ -88,8 +90,14 @@ const db eps = 1e-10;
 const db pi = acos(0) * 2;
 
 // clang-format on
+
 void solve() {
     //
+
+    SLL S = {1, 2, 5};
+    if (exist(S, 5)) {
+        cout << "lol" << endl;
+    }
 }
 
 int main() {

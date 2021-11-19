@@ -3,6 +3,7 @@ const ll nax = 4e5 + 10;
 
 namespace SA {
 
+ll n, k;
 ll L[nax][3], tempL[nax][3];
 ll P[nax];
 ll cnt[nax];  // counts the number of elements in each bucket
@@ -28,8 +29,8 @@ void radix(const ll n, const ll ind, ll from[][3], ll to[][3]) {
 }
 
 void buildSA(const string& s, ll sa[], ll ind[]) {
-    ll n = lg(s);
-    ll k = log2(n) + 2;
+    n = lg(s);
+    k = log2(n) + 2;
 
     rep(i, 0, n) {
         P[i] = s[i];  // initial rank is the character string is
@@ -54,10 +55,7 @@ void buildSA(const string& s, ll sa[], ll ind[]) {
         rep(j, 0, n) {
             // If the strings are the same, then your rank is the same as
             // the previous
-            P[L[j][2]] =
-                j > 0 && L[j - 1][0] == L[j][0] && L[j - 1][1] == L[j][1]
-                    ? P[L[j - 1][2]]
-                    : j;
+            P[L[j][2]] = j > 0 && L[j - 1][0] == L[j][0] && L[j - 1][1] == L[j][1] ? P[L[j - 1][2]] : j;
         }
     }
 

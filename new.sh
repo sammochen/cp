@@ -2,9 +2,11 @@
 
 name="A.cpp"
 
+bottom="main"
+
 if [[ $# -eq 0 ]] ; then
 	cp ./body/defs.cpp $name
-	cat ./body/main.cpp >> $name
+	cat ./body/$bottom.cpp >> $name
 	
 	exit 0
 fi
@@ -16,7 +18,7 @@ fi
 
 cp ./body/defs.cpp $name
 cat ./templates/$1.cpp >> $name
-cat ./body/main.cpp >> $name
+cat ./body/$bottom.cpp >> $name
 
 
 
