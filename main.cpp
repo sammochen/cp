@@ -33,8 +33,8 @@ typedef queue<ll> QLL;
 #define uset unordered_set
 #define mset multiset
 
-#define CAN_COMPILE(NAME, EXPR)          \
-    template <typename, typename = void> struct NAME : false_type {};         \
+#define CAN_COMPILE(NAME, EXPR) \
+    template <typename, typename = void> struct NAME : false_type {}; \
     template <typename T>                struct NAME<T, decltype(EXPR, void())> : true_type {}
 
 CAN_COMPILE(is_pair, T::first && T::second);
