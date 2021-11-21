@@ -33,42 +33,33 @@ typedef queue<ll> QLL;
 #define uset unordered_set
 #define mset multiset
 
-const string open = "[", close = "]", sep = ", ";
+#define CAN_COMPILE(NAME, EXPR)          \
+    template <typename, typename = void> struct NAME : false_type {};         \
+    template <typename T>                struct NAME<T, decltype(EXPR, void())> : true_type {}
+
+CAN_COMPILE(is_pair, T::first && T::second);
+CAN_COMPILE(is_streamable, cout << declval<T>());
+
 class Repr {
    public:
-    string s;
-    Repr() : s("") {}
-    Repr(string s) : s(s) {}
-    Repr(double x) {
-        s = to_string(x);
-        while (s.back() == '0') s.pop_back();
-        if (s.back() == '.') s.pop_back();
-    }
-
-    template <typename T, typename U>
-    Repr(pair<T, U> A) : s(open + Repr(A.first).s + sep + Repr(A.second).s + close) {}
+    string s, open = "[", close = "]", sep = ", ";
 
     template <typename T>
-    Repr(vector<T> A) : s(for_each(A)) {}
-    template <typename T>
-    Repr(set<T> A) : s(for_each(A)) {}
-    template <typename T>
-    Repr(multiset<T> A) : s(for_each(A)) {}
-    template <typename T>
-    Repr(unordered_set<T> A) : s(for_each(A)) {}
-
-    template <typename T, typename U>
-    Repr(map<T, U> A) : s(for_each(A)) {}
-    template <typename T, typename U>
-    Repr(unordered_map<T, U> A) : s(for_each(A)) {}
+    Repr(T t) { s = ev1(t); }
 
    private:
     template <typename T>
-    static string for_each(T t) {
-        string ans = open;
-        for (auto x : t) ans += (ans == open ? "" : sep) + Repr(x).s;
-        return ans + close;
-    }
+    string ev3(T t, true_type) { return open + ev1(t.first) + sep + ev1(t.second) + close; }
+    template <typename T>
+    string ev3(T t, false_type) { string ans = open; for (auto a : t) { ans += (ans == open ? "" : sep) + ev1(a); } return ans + close; }
+
+    template <typename T>
+    string ev2(T t, true_type) { stringstream ss; ss << t; return ss.str(); }
+    template <typename T>
+    string ev2(T t, false_type) { return ev3(t, is_pair<T>()); }
+
+    template <typename T>
+    string ev1(T t) { return ev2(t, is_streamable<T>()); }
 };
 
 string repr() { return ""; }

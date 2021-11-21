@@ -12,7 +12,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     flags = "" if args.quiet else "-DTEST"
-    compile_cmd = f"g++ -std=c++14 -fsanitize=address {flags} main.cpp -o compiled.out"
+    compile_cmd = f"g++ -std=c++14 -O2 -fsanitize=address {flags} main.cpp -o compiled.out"
     compile_result = system(compile_cmd)
 
     if compile_result != 0:

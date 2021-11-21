@@ -31,3 +31,18 @@ template <typename A, typename B>
 bool exist(const A& a, const B& b) {
     return a.find(b) != a.end();
 }
+
+vector<string> ssplit(string s) {
+    stringstream ss(s);
+    string t;
+    vector<string> ans;
+    while (ss >> t) ans.pb(t);
+    return ans;
+}
+
+template <typename A>
+A reversed(const A& a) {
+    A b = a;
+    reverse(all(b));
+    return b;
+}
