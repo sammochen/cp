@@ -2,6 +2,7 @@
 using namespace std;
 
 typedef long long ll;
+
 ll rup(ll a, ll b) {
     return a % b ? a / b + 1 : a / b;
 }
@@ -24,4 +25,9 @@ ll powmod(ll a, ll b, ll m) {
     ll h = powmod(a, b / 2, m);
     ll ans = h * h % m;
     return b % 2 ? ans * a % m : ans;
+}
+
+template <typename A, typename B>
+bool exist(const A& a, const B& b) {
+    return a.find(b) != a.end();
 }

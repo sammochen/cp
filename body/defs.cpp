@@ -33,31 +33,50 @@ typedef queue<ll> QLL;
 #define uset unordered_set
 #define mset multiset
 
-namespace Debug {
 const string open = "[", close = "]", sep = ", ";
-ll n = 5;
+class Repr {
+   public:
+    string s;
+    Repr() : s("") {}
+    Repr(string s) : s(s) {}
+    Repr(double x) {
+        s = to_string(x);
+        while (s.back() == '0') s.pop_back();
+        if (s.back() == '.') s.pop_back();
+    }
 
-string f() { return "\n"; }
-string f(string s) { return s; }
-string f(char c) { return string(1, c); }
-string f(const char* a) { return a; }
+    template <typename T, typename U>
+    Repr(pair<T, U> A) : s(open + Repr(A.first).s + sep + Repr(A.second).s + close) {}
 
-string f(int x) { return to_string(x); }
-string f(float x) { return to_string(x); }
-string f(ll x) { return to_string(x); }
-string f(db x) { return to_string(x); }
+    template <typename T>
+    Repr(vector<T> A) : s(for_each(A)) {}
+    template <typename T>
+    Repr(set<T> A) : s(for_each(A)) {}
+    template <typename T>
+    Repr(multiset<T> A) : s(for_each(A)) {}
+    template <typename T>
+    Repr(unordered_set<T> A) : s(for_each(A)) {}
 
-template<typename I> string fit(I b, I e) { string s = open + f(*(b++)); while (b != e) { s += sep + f(*(b++)); } s += close; return s; }
-template<typename A, typename B> string f(pair<A, B> p) { return open + f(p.first) + sep + f(p.second) + close; }
+    template <typename T, typename U>
+    Repr(map<T, U> A) : s(for_each(A)) {}
+    template <typename T, typename U>
+    Repr(unordered_map<T, U> A) : s(for_each(A)) {}
 
-template<typename A> string f(A a[]) { return fit(a, a + n); }
-template<typename A> string f(A a) { return fit(a.begin(), a.end()); }
+   private:
+    template <typename T>
+    static string for_each(T t) {
+        string ans = open;
+        for (auto x : t) ans += (ans == open ? "" : sep) + Repr(x).s;
+        return ans + close;
+    }
+};
 
-template<typename H, typename... T> string f(H h, T... t) { return f(h) + " " + f(t...); }
-};  // namespace Debug
+string repr() { return ""; }
+template <typename T, typename... U>
+string repr(T t, U... u) { return Repr(t).s + " " + repr(u...); }
 
-#ifdef SAM
-#define debug(...) do { cerr << "[" << #__VA_ARGS__ << "]: ", cerr << Debug::f(__VA_ARGS__) << endl; } while (false)
+#ifdef TEST
+#define debug(...) do { cout << repr("[" + string(#__VA_ARGS__) + "]:", __VA_ARGS__) << endl; } while (false)
 #else
 #define debug(...) do {} while (false)
 #endif
@@ -78,7 +97,6 @@ ll powmod(ll a, ll b, ll m) { if (b == 0) return 1;	ll h = powmod(a, b/2, m); ll
 
 template<typename A, typename B> void upmin(A & x, B v) { x = min(x, (A)v); }
 template<typename A, typename B> void upmax(A & x, B v) { x = max(x, (A)v); }
-
 template <typename A, typename B> bool exist(const A& a, const B& b) { return a.find(b) != a.end(); }
 
 const VLL di = {0, 0, 1, -1, 1, -1, 1, -1};

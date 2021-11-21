@@ -24,7 +24,7 @@ else
 	exit 1
 fi
 
-cp A.cpp ../cp-submissions/$folder/$2.cpp
+cp main.cpp ../cp-submissions/$folder/$2.cpp
 
 message=$(echo added $2)
 echo $message

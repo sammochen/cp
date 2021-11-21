@@ -1,6 +1,6 @@
 #!/bin/bash
 
-name="A.cpp"
+name="main.cpp"
 
 bottom="main"
 
