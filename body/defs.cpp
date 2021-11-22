@@ -12,8 +12,8 @@ using VVLL = vector<VLL>;
 using VVVLL = vector<VVLL>;
 using PLL = pair<ll, ll>;
 using MLL = map<ll, ll>;
-using SLL = set<ll, ll>;
-using QLL = queue<ll, ll>;
+using SLL = set<ll>;
+using QLL = queue<ll>;
 using SS = stringstream;
 
 #define rep(x, l, u) for (ll x = l; x < u; x++)
