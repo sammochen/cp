@@ -33,41 +33,27 @@ typedef queue<ll> QLL;
 #define uset unordered_set
 #define mset multiset
 
-#define CAN_COMPILE(NAME, EXPR) \
-    template <typename, typename = void> struct NAME : false_type {}; \
-    template <typename T>                struct NAME<T, decltype(EXPR, void())> : true_type {}
-
-CAN_COMPILE(is_pair, T::first && T::second);
-CAN_COMPILE(is_streamable, cout << declval<T>());
-
-class Repr {
-   public:
-    string s, open = "[", close = "]", sep = ", ";
-
-    template <typename T>
-    Repr(T t) { s = ev1(t); }
-
-   private:
-    template <typename T>
-    string ev3(T t, true_type) { return open + ev1(t.first) + sep + ev1(t.second) + close; }
-    template <typename T>
-    string ev3(T t, false_type) { string ans = open; for (auto a : t) { ans += (ans == open ? "" : sep) + ev1(a); } return ans + close; }
-
-    template <typename T>
-    string ev2(T t, true_type) { stringstream ss; ss << t; return ss.str(); }
-    template <typename T>
-    string ev2(T t, false_type) { return ev3(t, is_pair<T>()); }
-
-    template <typename T>
-    string ev1(T t) { return ev2(t, is_streamable<T>()); }
-};
-
-string repr() { return ""; }
-template <typename T, typename... U>
-string repr(T t, U... u) { return Repr(t).s + " " + repr(u...); }
-
 #ifdef TEST
-#define debug(...) do { cout << repr("[" + string(#__VA_ARGS__) + "]:", __VA_ARGS__) << endl; } while (false)
+
+namespace Debug {
+const string open = "[", sep = ", ", close = "]";
+
+template <int I> struct choice : choice<I + 1> {};
+template <> struct choice<2> {};
+
+template <typename T>
+auto one(T t, choice<0>) -> decltype(cout << t, string()) { stringstream ss; ss << t; return ss.str(); }
+template <typename T>
+auto one(T t, choice<1>) -> decltype(t.first, t.second, string()) { return open + one(t.first, choice<0>()) + ", " + one(t.second, choice<0>()) + close; }
+template <typename T>
+auto one(T t, choice<2>) -> decltype(t.begin(), t.end(), string()) { string ans = open; for (auto a : t) { ans += (ans == open ? "" : sep) + one(a, choice<0>()); } return ans + close; }
+
+string mult() { return ""; }
+template <typename A, typename... B>
+string mult(A a, B... b) { return one(a, choice<0>()) + " " + mult(b...); }
+}  // namespace Debug
+
+#define debug(...) do { cout << Debug::mult("[" + string(#__VA_ARGS__) + "]:", __VA_ARGS__) << endl; } while (false)
 #else
 #define debug(...) do {} while (false)
 #endif
