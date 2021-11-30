@@ -33,12 +33,13 @@ using SS = stringstream;
 #define mset multiset
 
 // clang-format off
+// --------------------------------- DEBUG ---------------------------------
 namespace Debug {
 const string open = "[", sep = ", ", close = "]";
 struct Second {}; struct First : Second {};
 
 template <typename T>
-auto one(T t, First) -> decltype(cout << t, string()) { SS ss; ss << t; return ss.str(); }
+auto one(T t, First) -> decltype(cout << t, string()) { stringstream ss; ss << t; return ss.str(); }
 template <typename T>
 auto one(T t, Second) -> decltype(t.first, t.second, string()) { return open + one(t.first, First()) + ", " + one(t.second, First()) + close; }
 template <typename T>
@@ -48,12 +49,8 @@ string mult() { return ""; }
 template <typename A, typename... B>
 string mult(A a, B... b) { return one(a, First()) + " " + mult(b...); }
 }  // namespace Debug
-
-#ifdef TEST
 #define debug(...) do { cout << Debug::mult("[" + string(#__VA_ARGS__) + "]:", __VA_ARGS__) << endl; } while (false)
-#else
-#define debug(...) do {} while (false)
-#endif
+// --------------------------------- DEBUG ---------------------------------
 
 ll ob(ll i, ll n) { return i < 0 || i >= n; }
 ll tp(ll x) { return ( 1LL << x ); }

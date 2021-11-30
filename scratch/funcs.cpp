@@ -46,3 +46,22 @@ A reversed(const A& a) {
     reverse(all(b));
     return b;
 }
+
+template <typename T>
+T closest(const set<T>& S, T key) {
+    int ok = 0, ans = -1;
+
+    auto update = [&](int x) {
+        if (ok == 0) {
+            ok = 1;
+            ans = x;
+        } else if (abs(x - key) < abs(ans - key)) {
+            ans = x;
+        }
+    };
+
+    auto it = S.lower_bound(key);
+    if (it != S.end()) update(*it);
+    if (it != S.begin()) update(*(--it));
+    return ans;
+}

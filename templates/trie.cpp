@@ -1,12 +1,17 @@
 struct tnode {
-    tnode *children[26];
+    vector<tnode *> children;
     int isEnd = 0;
+
+    tnode() {
+        children.resize(26);
+        isEnd = 0;
+    }
 };
 
 void insert(tnode *root, const string &key) {
     tnode *cur = root;
-    rep(i, 0, lg(key)) {
-        ll index = key[i] - 'A';
+    for (int i = 0; i < key.size(); i++) {
+        int index = key[i] - 'A';
         if (!cur->children[index]) {
             cur->children[index] = new tnode();
         }

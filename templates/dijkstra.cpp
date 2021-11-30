@@ -1,9 +1,9 @@
 namespace Path {
-VLL d;    // dist
-VLL cnt;  // num ways to get there in shortest time
+const ll inf = 1e18;
+vector<ll> d, cnt;  // dist, num ways to get there
 
-void build(vector<vector<PLL>>& E, ll s) {
-    ll n = E.size();
+void build(const vector<vector<PLL>>& E, const ll s) {
+    const ll n = E.size();
 
     // edge PLL: to, weight
     // todo PLL: dist, at
