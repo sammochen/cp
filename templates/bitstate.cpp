@@ -1,28 +1,29 @@
 // bit vector
-template <int N, int W>
-struct BV {
-    const ll ones = (1 << W) - 1;  // width-lengthed 1s
-    unsigned long long mask = 0;   // data repr
+template <int Base>
+struct Bitstate {
+    ll repr = 0;
+    mutable vector<ll> pows;
 
-    void set(const ll ind, const ll val) {
-        assert(ind >= 0 && ind < N);
-        assert(val >= 0 && val < (1 << W));
-
-        mask &= ~(ones << (ind * W));  // set to 0
-        mask |= (val << (ind * W));    // set to val
+    Bitstate() {
+        pows.assign(30, -1);
+        pows[0] = 1;
     }
 
-    const ll get(const ll ind) const {
-        return (mask >> (ind * W)) & ones;
+    ll base_pow(ll ind) const {
+        return (pows[ind] == -1) ? pows[ind] = base_pow(ind - 1) * Base : pows[ind];
     }
 
-    const ll compr(const ll pow) const {
-        ll p = 1;
-        ll res = 0;
-        for (int i = 0; i < n; i++) {
-            res += get(i) * p;
-            p *= pow;
-        }
-        return res;
+    void set(ll ind, ll val) {
+        repr += (val - get(ind)) * base_pow(ind);
+    }
+
+    ll get(ll ind) const {
+        return (repr / base_pow(ind)) % Base;
+    }
+
+    vector<ll> to_vector(ll n) const {
+        vector<ll> ans(n);
+        for (ll i = 0; i < n; i++) ans[i] = get(i);
+        return ans;
     }
 };

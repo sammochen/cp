@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 typedef long long ll;
 
 ll rup(ll a, ll b) {
@@ -27,16 +24,11 @@ ll powmod(ll a, ll b, ll m) {
     return b % 2 ? ans * a % m : ans;
 }
 
-template <typename A, typename B>
-bool exist(const A& a, const B& b) {
-    return a.find(b) != a.end();
-}
-
-vector<string> ssplit(string s) {
+vector<string> ssplit(const string& s) {
     stringstream ss(s);
     string t;
     vector<string> ans;
-    while (ss >> t) ans.pb(t);
+    while (ss >> t) ans.push_back(t);
     return ans;
 }
 

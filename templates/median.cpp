@@ -3,7 +3,7 @@ struct Median {
     mset<ll> A, B;
 
     void move(mset<ll>& from, mset<ll>& to, const ll& x) {
-        assert(from.find(x) != from.end());
+        assert(from.count(x));
         from.erase(from.find(x));
         to.insert(x);
     }

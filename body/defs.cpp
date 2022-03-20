@@ -1,5 +1,3 @@
-// Hello
-
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -19,6 +17,7 @@ using SS = stringstream;
 #define rep(x, l, u) for (ll x = l; x < u; x++)
 #define rrep(x, l, u) for (ll x = l; x >= u; x--)
 #define fe(x, a) for (auto x : a)
+#define fce(x, a) for (const auto& x : a)
 #define all(x) x.begin(), x.end()
 #define rall(x) x.rbegin(), x.rend()
 #define mst(x, v) memset(x, v, sizeof(x))
@@ -49,7 +48,11 @@ string mult() { return ""; }
 template <typename A, typename... B>
 string mult(A a, B... b) { return one(a, First()) + " " + mult(b...); }
 }  // namespace Debug
+#ifdef DEBUG
 #define debug(...) do { cout << Debug::mult("[" + string(#__VA_ARGS__) + "]:", __VA_ARGS__) << endl; } while (false)
+#else
+#define debug(...) do {} while (false)
+#endif
 // --------------------------------- DEBUG ---------------------------------
 
 ll ob(ll i, ll n) { return i < 0 || i >= n; }
@@ -66,7 +69,6 @@ ll powmod(ll a, ll b, ll m) { if (b == 0) return 1;	ll h = powmod(a, b/2, m); ll
 template<typename A, typename B> void upmin(A& x, B v) { x = min(x, (A)v); }
 template<typename A, typename B> void upmax(A& x, B v) { x = max(x, (A)v); }
 template<typename A> A reversed(const A& a) { A b = a; reverse(all(b)); return b; }
-template <typename A, typename B> bool exist(const A& a, const B& b) { return a.find(b) != a.end(); }
 
 const VLL di = {0, 0, 1, -1, 1, -1, 1, -1};
 const VLL dj = {1, -1, 0, 0, -1, -1, 1, 1};

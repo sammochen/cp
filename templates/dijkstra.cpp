@@ -1,4 +1,4 @@
-namespace Path {
+namespace Dijk {
 const ll inf = 1e18;
 vector<ll> d, cnt;  // dist, num ways to get there
 
@@ -34,9 +34,9 @@ void build(const vector<vector<PLL>>& E, const ll s) {
                 cnt[to] = cnt[at];
             } else if (dist + weight == d[to]) {
                 cnt[to] += cnt[at];
-                cnt[to] %= mod;
+                // cnt[to] %= mod;
             }
         }
     }
 }
-}  // namespace Path
+}  // namespace Dijk

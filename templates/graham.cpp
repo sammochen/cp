@@ -8,6 +8,7 @@ ll cw(point a, point b, point c) {
     return v == 0 ? 0 : v < 0 ? -1 : 1;
 }
 
+// return square of dist
 ll dist(const point& a, const point& b) {
     ll dy = b.y - a.y, dx = b.x - a.x;
     return dy * dy + dx * dx;

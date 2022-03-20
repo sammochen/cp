@@ -1,4 +1,4 @@
-ll value(string s, ll base) {
+ll value(const string& s, ll base) {
     ll b = 1;
     ll ans = 0;
     rrep(i, s.length() - 1, 0) {
