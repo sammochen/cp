@@ -1,48 +1,34 @@
-// Counts num inversions of an array using merge sort
-// O(nlogn)
+
 namespace Inv {
-VLL A;
-
-ll helper(ll i, ll j) {
-    if (j - i <= 0) return 0;
-
+ll count(ll i, ll j, VLL& temp) {
+    if (i >= j) return 0;
     ll mid = (i + j) / 2;
-    const auto L = helper(i, mid);      // left side
-    const auto R = helper(mid + 1, j);  // right side
+    const ll L = count(i, mid, temp);      // L sub problem
+    const ll R = count(mid + 1, j, temp);  // R sub problem
 
     VLL ans = {};
     ll a = i, b = mid + 1, cur = 0;
 
     while (a < mid + 1 || b < j + 1) {
-        bool chooseRight = false;
+        // Whenever we choose right, we invert against all remaining lefts.
+        const ll x = a == mid + 1 ? inf : temp[a];
+        const ll y = b == j + 1 ? inf : temp[b];
+        const ll chooseLeft = min(x, y) == x;
 
-        if (a == mid + 1) {
-            chooseRight = true;
-        } else if (b == j + 1) {
-            chooseRight = false;
+        if (chooseLeft) {
+            ans.push_back(temp[a++]);
         } else {
-            ll ele = min(A[a], A[b]);
-            chooseRight = ele == A[a] ? false : true;
-        }
-
-        if (chooseRight == false) {
-            ans.push_back(A[a++]);
-        } else {
-            ans.push_back(A[b++]);
-
-            // if i choose right, i am inverting against all remaining Ls
+            ans.push_back(temp[b++]);
             cur += mid + 1 - a;
         }
     }
-    for (int x = i; x <= j; x++) {
-        A[x] = ans[x - i];
-    }
 
+    rep(x, i, j + 1) temp[x] = ans[x - i];  // update (and sort) temp[i:j+1]
     return L + R + cur;
 }
 
 ll count(const VLL& arr) {
-    A = arr;
-    return helper(0, arr.size() - 1);
+    VLL temp = arr;
+    return count(0, arr.size() - 1, temp);
 }
 }  // namespace Inv

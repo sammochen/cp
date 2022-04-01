@@ -14,7 +14,9 @@ def get_args():
 
 def compile(args):
     flags = "" if args.quiet else "-DDEBUG"
-    compile_cmd = f"g++ --std=c++17 -fsanitize=address -DLOCAL {flags} main.cpp -o compiled.out"
+    compile_cmd = (
+        f"g++ --std=c++17 -fsanitize=address -DLOCAL {flags} main.cpp -o compiled.out"
+    )
     return os.system(compile_cmd)
 
 
@@ -22,7 +24,13 @@ def run(args):
     input_files = args.input if args.input else glob.glob("*.in")
     input_files.sort()
     for input_file in input_files:
-        output_file = input_file.replace('.in', '.out')
+        # Check if the input_file is empty
+        with open(input_file) as f:
+            x = f.read().strip()
+            if len(x) == 0:
+                continue
+
+        output_file = input_file.replace(".in", ".out")
         print(f">>>>> running {input_file}")
         start_time = time()
         os.system(f"./compiled.out < {input_file}")
@@ -43,6 +51,6 @@ if __name__ == "__main__":
 
     if args.interactive:
         print(">>>>> interactive mode:")
-        os.system('./compiled.out')
+        os.system("./compiled.out")
     else:
         run(args)
