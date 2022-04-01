@@ -1,8 +1,8 @@
-namespace Dijk {
+namespace DIJ {
 const ll inf = 1e18;
 vector<ll> d, cnt;  // dist, num ways to get there
 
-void build(const vector<vector<PLL>>& E, const ll s) {
+void solve(const vector<vector<PLL>>& E, const ll s) {
     const ll n = E.size();
 
     // edge PLL: to, weight
@@ -23,6 +23,7 @@ void build(const vector<vector<PLL>>& E, const ll s) {
 
         const ll dist = t.first;
         const ll at = t.second;
+        if (d[at] < dist) continue;
 
         for (const auto& edge : E[at]) {
             const ll to = edge.first;
@@ -39,4 +40,4 @@ void build(const vector<vector<PLL>>& E, const ll s) {
         }
     }
 }
-}  // namespace Dijk
+}  // namespace DIJ

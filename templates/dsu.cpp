@@ -1,11 +1,11 @@
 
 struct DSU {
     const ll n;
-    vector<ll> par;
+    VLL par;
 
     DSU(ll n) : n(n) {
         par.resize(n);
-        for (ll i = 0, i < n; i++) {
+        for (ll i = 0; i < n; i++) {
             par[i] = i;
         }
     }

@@ -1,4 +1,4 @@
-typedef long long ll;
+using ll = long long;
 
 ll rup(ll a, ll b) {
     return a % b ? a / b + 1 : a / b;

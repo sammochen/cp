@@ -1,7 +1,7 @@
 
 
-void solve(ll tc) {
-    cout << "Case #" << tc << ": ";
+void solve(ll goog) {
+    cout << "Case #" << goog << ": ";
 }
 
 int main() {
@@ -10,6 +10,6 @@ int main() {
 
     ll t = 1;
     cin >> t;
-    rep(i, 0, t) solve(i + 1);
+    rep(i, 1, t + 1) solve(i);
     return 0;
 }

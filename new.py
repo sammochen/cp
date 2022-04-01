@@ -5,20 +5,17 @@ from time import time
 
 
 def get_args():
-    parser = argparse.ArgumentParser(description="run.py")
-    parser.add_argument("-i", "--input", nargs="+")
-    parser.add_argument("-q", "--quiet", action="store_true")
-    parser.add_argument("-ia", "--interactive", action="store_true")
+    parser = argparse.ArgumentParser(description="new.py")
+    parser.add_argument("-t", "--template", nargs=1)
+    parser.add_argument("-g", "--google", action="store_true")
     return parser.parse_args()
 
 
-def compile(args):
-    flags = "" if args.quiet else "-DDEBUG"
-    compile_cmd = f"g++ --std=c++17 -fsanitize=address -DLOCAL {flags} main.cpp -o compiled.out"
-    return os.system(compile_cmd)
+ 
 
 
-def run(args):
+
+def reset(args):
     input_files = args.input if args.input else glob.glob("*.in")
     input_files.sort()
     for input_file in input_files:

@@ -20,8 +20,20 @@ void init() {
     }
 }
 
-ll isprime(ll x) {
+ll isPrime(ll x) {
     init();
     return prevPrime[x] == x;
+}
+
+umap<ll, ll> decomp(const ll x) {
+    init();
+    umap<ll, ll> ans;
+    ll y = x;
+    while (y > 1) {
+        ll a = prevPrime[y];
+        ans[a]++;
+        y /= a;
+    }
+    return ans;
 }
 }  // namespace Sieve
