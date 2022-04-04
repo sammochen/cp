@@ -3,7 +3,7 @@
 using namespace std;
 
 using ll = long long;
-using db = double;
+using db = long double;
 using VS = vector<string>;
 using VLL = vector<ll>;
 using VVLL = vector<VLL>;
