@@ -58,7 +58,7 @@ VS ssplit(string s) { VS ans; SS ss(s); while (ss >> s) { ans.push_back(s); } re
 
 void makemod(ll& x, ll m) { x %= m; if (x < 0) { x += m; } }
 ll getmod(ll x, ll m) { makemod(x, m); return x; }
-ll powmod(ll a, ll b, ll m) { if (b == 0) return 1;	ll h = powmod(a, b/2, m); ll ans = h*h%m; return b%2 ? ans*a%m : ans; }
+ll powmod(ll a, ll b, ll m) { if (b == 0) return 1; ll h = powmod(a, b/2, m); ll ans = h*h%m; return b%2 ? ans*a%m : ans; }
 ll invmod(ll a, ll m) { return powmod(a, m - 2, m); }
 
 template<typename A, typename B> void upmin(A& x, B v) { x = min(x, (A)v); }
