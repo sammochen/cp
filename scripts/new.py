@@ -7,6 +7,7 @@ def get_args():
     parser = argparse.ArgumentParser(description="new.py")
     parser.add_argument("-t", "--template", nargs="+")
     parser.add_argument("-g", "--google", action="store_true")
+    parser.add_argument("-k", "--keep", action="store_true")
     return parser.parse_args()
 
 
@@ -32,7 +33,8 @@ def delete_in_out():
 
 def reset(args):
     make_main(args)
-    delete_in_out()
+    if not args.keep:
+        delete_in_out()
 
 
 if __name__ == "__main__":
