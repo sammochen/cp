@@ -8,15 +8,19 @@ def get_args():
     parser = argparse.ArgumentParser(description="run.py")
     parser.add_argument("-i", "--input", nargs="+")
     parser.add_argument("-q", "--quiet", action="store_true")
+    parser.add_argument("--fast", action="store_true")
     parser.add_argument("-ia", "--interactive", action="store_true")
     return parser.parse_args()
 
 
 def compile(args):
-    flags = "" if args.quiet else "-DDEBUG"
-    compile_cmd = (
-        f"g++ --std=c++17 -fsanitize=address -DLOCAL {flags} main.cpp -o compiled.out"
-    )
+    flags = []
+    if not args.quiet:
+        flags.append("-DDEBUG")
+    if args.fast:
+        flags.append("-O3")
+
+    compile_cmd = f"g++ --std=c++17 -fsanitize=address -DLOCAL {' '.join(flags)} main.cpp -o compiled.out"
     return os.system(compile_cmd)
 
 
