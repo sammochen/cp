@@ -3,23 +3,22 @@
 #define rson (ind << 1 | 1)
 
 namespace SegTree {
-const ll maxn = 1e5 + 5;
-
+const ll N = 100'005;
 struct node {
-    ll l, r;
+    ll l, r;  // [l, r] bounds for the node, inclusive
 };
-
-node no[maxn * 4];
+node nodes[N * 4];
 
 void push_up(ll ind) {}
 void push_down(ll ind) {}
 
 void build(ll l, ll r, ll ind) {
-    no[ind].l = l;
-    no[ind].r = r;
+    nodes[ind].l = l;
+    nodes[ind].r = r;
     if (l == r) {
-        // do something
+        // TODO: leaf node - assign value
     } else {
+        // parent node - the values will be pushed up from the children
         ll mid = (l + r) / 2;
         build(l, mid, lson);
         build(mid + 1, r, rson);
@@ -28,9 +27,9 @@ void build(ll l, ll r, ll ind) {
 }
 
 void update(ll l, ll r, ll ind, ll val) {
-    if (l > no[ind].r || r < no[ind].l) return;
-    if (l <= no[ind].l && no[ind].r <= r) {
-        // do something
+    if (l > nodes[ind].r || r < nodes[ind].l) return;
+    if (l <= nodes[ind].l && nodes[ind].r <= r) {
+        // TODO: lazily save some state. note the state will be pushed down later
     } else {
         push_down(ind);
         update(l, r, lson, val);
@@ -40,9 +39,9 @@ void update(ll l, ll r, ll ind, ll val) {
 }
 
 void query(ll l, ll r, ll ind, ll& ans) {
-    if (l > no[ind].r || r < no[ind].l) return;
-    if (l <= no[ind].l && no[ind].r <= r) {
-        // do something, ans = ?
+    if (l > nodes[ind].r || r < nodes[ind].l) return;
+    if (l <= nodes[ind].l && nodes[ind].r <= r) {
+        // TODO: do something. ans = ?
     } else {
         push_down(ind);
         query(l, r, lson, ans);
