@@ -11,7 +11,7 @@ def get_args():
     return parser.parse_args()
 
 
-def make_main(args):
+def build_main(args):
     os.system("cp body/top.cpp main.cpp")
 
     if args.template:
@@ -23,18 +23,20 @@ def make_main(args):
         os.system("cat body/bottom.cpp >> main.cpp")
 
 
-def delete_in_out():
-    os.system("rm *.out 2> /dev/null")
+def clear_files():
+    # Delete .actual
+    os.system("rm *.actual 2> /dev/null")
 
-    input_files = glob.glob("*.in")
-    for input_file in input_files:
+    # Clear .in and .expected
+    cases = glob.glob("*.in") + glob.glob("*.expected")
+    for input_file in cases:
         os.system(f"> {input_file}")
 
 
 def reset(args):
-    make_main(args)
+    build_main(args)
     if not args.keep:
-        delete_in_out()
+        clear_files()
 
 
 if __name__ == "__main__":

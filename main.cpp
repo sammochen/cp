@@ -33,7 +33,7 @@ const string open = "[", sep = ", ", close = "]";
 struct Second {}; struct First : Second {};
 
 template <typename T>
-auto one(T t, First) -> decltype(cout << t, string()) { stringstream ss; ss << t; return ss.str(); }
+auto one(T t, First) -> decltype(cerr << t, string()) { stringstream ss; ss << t; return ss.str(); }
 template <typename T>
 auto one(T t, Second) -> decltype(t.first, t.second, string()) { return open + one(t.first, First()) + ", " + one(t.second, First()) + close; }
 template <typename T>
@@ -44,7 +44,7 @@ template <typename A, typename... B>
 string mult(A a, B... b) { return one(a, First()) + " " + mult(b...); }
 }  // namespace Debug
 #ifdef DEBUG
-#define debug(...) do { cout << Debug::mult("[" + string(#__VA_ARGS__) + "]:", __VA_ARGS__) << endl; } while (false)
+#define debug(...) do { cerr << Debug::mult("[" + string(#__VA_ARGS__) + "]:", __VA_ARGS__) << endl; } while (false)
 #else
 #define debug(...) do {} while (false)
 #endif
@@ -84,6 +84,9 @@ int main() {
 
     ll t = 1;
     // cin >> t;
+#ifdef DEBUG
+    t = 2;
+#endif
     rep(i, 0, t) solve();
     return 0;
 }

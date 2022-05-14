@@ -1,5 +1,7 @@
 .save
 .vscode
-*.out
+program
 *.class
 *.in
+*.expected
+*.actual

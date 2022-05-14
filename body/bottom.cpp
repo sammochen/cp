@@ -9,6 +9,9 @@ int main() {
 
     ll t = 1;
     // cin >> t;
+#ifdef DEBUG
+    t = 2;
+#endif
     rep(i, 0, t) solve();
     return 0;
 }
