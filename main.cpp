@@ -58,6 +58,7 @@ VS ssplit(string s) { VS ans; SS ss(s); while (ss >> s) { ans.push_back(s); } re
 
 void makemod(ll& x, ll m) { x %= m; if (x < 0) { x += m; } }
 ll getmod(ll x, ll m) { makemod(x, m); return x; }
+void addmod(ll &a, ll b, ll m) { a += b; if (a >= m) a -= m; }
 ll powmod(ll a, ll b, ll m) { if (b == 0) return 1; ll h = powmod(a, b/2, m); ll ans = h*h%m; return b%2 ? ans*a%m : ans; }
 ll invmod(ll a, ll m) { return powmod(a, m - 2, m); }
 
@@ -79,14 +80,10 @@ void solve() {
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    ios_base::sync_with_stdio(0), cin.tie(0);
 
     ll t = 1;
     // cin >> t;
-#ifdef DEBUG
-    // t = 2;
-#endif
     rep(i, 0, t) solve();
     return 0;
 }

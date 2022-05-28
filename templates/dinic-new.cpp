@@ -24,6 +24,14 @@ struct Dinic {
         E[v].push_back(edges.size() - 1);
     }
 
+    void fromSource(ll v, ll cap) {
+        return addEdge(source, v, cap);
+    }
+
+    void toSink(ll v, ll cap) {
+        return addEdge(v, sink, cap);
+    }
+
     // bfs
     VLL buildLevel(ll start, ll& ok) {
         VLL level(n, -1);  // Level graph of BFS. Distance from source.

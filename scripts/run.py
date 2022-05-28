@@ -24,7 +24,7 @@ def compile(args):
     if args.fast:
         flags.append("-O3")
 
-    compile_cmd = f"g++ --std=c++17 -fsanitize=address {' '.join(flags)} main.cpp -o {BINARY_NAME}"
+    compile_cmd = f"g++ --std=c++17 -fsanitize=address -O2 {' '.join(flags)} main.cpp -o {BINARY_NAME}"
     return os.system(compile_cmd)
 
 

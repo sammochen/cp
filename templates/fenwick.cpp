@@ -12,12 +12,17 @@ struct BIT {
         }
     }
 
-    ll sum(ll i) {
+    ll sum(ll i) const {
         ll total = 0;
         while (i > 0) {
             total += arr[i];
             i -= lsb(i);
         }
         return total;
+    }
+
+    ll sumRange(ll i, ll j) const {
+        assert(i <= j);
+        return sum(j) - sum(i - 1);
     }
 };
