@@ -1,14 +1,14 @@
 
 struct DSU {
     const ll n;
-    VLL par;
+    VLL par, sz;
     ll numComponents;
 
     DSU(ll n) : n(n), numComponents(n) {
         par.resize(n);
-        for (ll i = 0; i < n; i++) {
-            par[i] = i;
-        }
+        iota(all(par), 0);
+
+        sz.assign(n, 0);
     }
 
     ll root(ll x) {
@@ -21,6 +21,7 @@ struct DSU {
 
     void merge(ll a, ll b) {
         if (same(a, b)) return;
+        sz[root(a)] += sz[root(b)];
         par[root(b)] = root(a);
         numComponents--;
     }

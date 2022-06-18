@@ -10,9 +10,11 @@ BINARY_NAME = "program"
 def get_args():
     parser = argparse.ArgumentParser(description="run.py")
     parser.add_argument("-i", "--input", nargs="+")
+    parser.add_argument("-c", "--compile-only", action="store_true")
     parser.add_argument("-q", "--quiet", action="store_true")
     parser.add_argument("--fast", action="store_true")
     parser.add_argument("-ia", "--interactive", action="store_true")
+    parser.add_argument("-j", "--judge", action="store_true")
     parser.add_argument("-t", "--time", action="store_true")
     return parser.parse_args()
 
@@ -82,10 +84,18 @@ if __name__ == "__main__":
     args = get_args()
 
     if compile(args) != 0:
-        exit()
+        exit(1)
 
-    if args.interactive:
-        print(">>>>> interactive mode:")
+    if args.compile_only:
+        print(">>>>> Successfully compiled.")
+        exit()
+    elif args.interactive:
+        print(">>>>> Interactive mode:")
         os.system(f"./{BINARY_NAME}")
+    elif args.judge:
+        print(">>>>> Running against judge:")
+        os.system(
+            "python3 interactive/runner.py python3 interactive/judge.py 0 -- ./program"
+        )
     else:
         run(args)

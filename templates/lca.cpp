@@ -4,43 +4,37 @@ ll n, k;
 VVLL E;
 
 VVLL par;  // par[i][k] gives the 2^k parent, or -1 if too high
-VLL depth;
-VLL tin, tout;
-ll cur_time = 0;
+VLL depth, timeIn, timeOut;
+ll curTime = 0;
 
-void dfs(const ll& at, const ll& from, const ll& d) {
-    par[at][0] = from;
-    depth[at] = d;
-    tin[at] = cur_time++;
-
+void dfs(const ll at, const ll prev, const ll d) {
+    par[at][0] = prev, depth[at] = d, timeIn[at] = curTime++;
     fe(to, E[at]) {
-        if (to == from) continue;
+        if (to == prev) continue;
         dfs(to, at, d + 1);
     }
-
-    tout[at] = cur_time++;
+    timeOut[at] = curTime++;
 }
 
 // checks if i is j's parent
-ll is_par(ll i, ll j) {
-    return tin[i] <= tin[j] && tout[i] >= tout[j];
+ll isPar(ll i, ll j) {
+    return timeIn[i] <= timeIn[j] && timeOut[i] >= timeOut[j];
 }
 
-ll dist_par(ll i, ll j) {
-    assert(is_par(i, j));
+ll distPar(ll i, ll j) {
+    // return dist knowing that isPar(i, j)
+    assert(isPar(i, j));
 
-    // try raise j until it is i
-
+    // try raise j as high as possible
     ll ans = 0;
     rrep(d, k - 1, 0) {
-        ll nextj = par[j][d];
+        const ll jj = par[j][d];
 
         // if j goes too far, don't do it
-        if (nextj == -1) continue;
-        if (is_par(nextj, i)) continue;
+        if (jj == -1 || isPar(jj, i)) continue;
 
         ans += tp(d);
-        j = nextj;
+        j = jj;
     }
     ans += 1;
     return ans;
@@ -48,30 +42,34 @@ ll dist_par(ll i, ll j) {
 
 ll lca(ll i, ll j) {
     if (i == j) return i;
-    if (is_par(i, j)) return i;
-    if (is_par(j, i)) return j;
+    if (isPar(i, j)) return i;
+    if (isPar(j, i)) return j;
 
     // try increase i as high as possible without being j's parent
     rrep(d, k - 1, 0) {
-        ll nexti = par[i][d];
-        if (nexti == -1 || is_par(nexti, j)) continue;
-        i = nexti;
+        ll ii = par[i][d];
+        if (ii == -1 || isPar(ii, j)) continue;
+        i = ii;
     }
     return par[i][0];
+}
+
+ll dist(ll i, ll j) {
+    ll p = lca(i, j);
+    return distPar(p, i) + distPar(p, j);
 }
 
 void build(ll n, const VVLL& E) {
     LCA::n = n;
     LCA::E = E;
-    LCA::k = log2(n) + 2;
+    LCA::k = log2(n) + 2;  // safety
 
     par.resize(n, VLL(k));
-    depth.resize(n);
-    tin.resize(n);
-    tout.resize(n);
-    cur_time = 1;
+    depth.resize(n), timeIn.resize(n), timeOut.resize(n);
+    curTime = 1;
     dfs(0, -1, 0);
 
+    // binary lifting
     rep(d, 1, k) {
         rep(i, 0, n) {
             if (par[i][d - 1] == -1) {
@@ -82,5 +80,4 @@ void build(ll n, const VVLL& E) {
         }
     }
 }
-
 }  // namespace LCA

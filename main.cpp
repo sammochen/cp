@@ -68,10 +68,13 @@ template<typename A> A reversed(const A& a) { A b = a; reverse(all(b)); return b
 
 const VLL di = {0, 0, 1, -1, 1, -1, 1, -1};
 const VLL dj = {1, -1, 0, 0, -1, -1, 1, 1};
-const ll mod = 1'000'000'007, mod2 = 998'244'353, mod3 = 1'000'000'207, mod4 = 1'000'003;
+const VLL mods = {1'000'000'007, 998'244'353, 1'000'000'207, 1'000'003};
+const ll mod = mods[0];
 const ll inf = (ll)1e18 + 5;
 const db eps = 1e-10;
 const db pi = acos(0) * 2;
+
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 // clang-format on
 
@@ -83,7 +86,7 @@ int main() {
     ios_base::sync_with_stdio(0), cin.tie(0);
 
     ll t = 1;
-    // cin >> t;
+    cin >> t;
     rep(i, 0, t) solve();
     return 0;
 }
