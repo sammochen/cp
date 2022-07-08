@@ -62,9 +62,8 @@ void addmod(ll &a, ll b, ll m) { a += b; if (a >= m) a -= m; }
 ll powmod(ll a, ll b, ll m) { if (b == 0) return 1; ll h = powmod(a, b/2, m); ll ans = h*h%m; return b%2 ? ans*a%m : ans; }
 ll invmod(ll a, ll m) { return powmod(a, m - 2, m); }
 
-template<typename A, typename B> void upmin(A& x, B v) { x = min(x, (A)v); }
-template<typename A, typename B> void upmax(A& x, B v) { x = max(x, (A)v); }
-template<typename A> A reversed(const A& a) { A b = a; reverse(all(b)); return b; }
+template <typename A, typename B> bool upmin(A& x, B v) { if (v >= x) return false; x = v; return true; }
+template <typename A, typename B> bool upmax(A& x, B v) { if (v <= x) return false; x = v; return true; }
 
 const VLL di = {0, 0, 1, -1, 1, -1, 1, -1};
 const VLL dj = {1, -1, 0, 0, -1, -1, 1, 1};
@@ -73,7 +72,6 @@ const ll mod = mods[0];
 const ll inf = (ll)1e18 + 5;
 const db eps = 1e-10;
 const db pi = acos(0) * 2;
-
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 // clang-format on

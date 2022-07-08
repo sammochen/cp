@@ -120,12 +120,14 @@ if t_sol.return_code:
         "time or memory limits) would be interpreted as a Runtime Error "
         "in the system."
     )
+    exit(1)
 elif t_judge.return_code:
     print(
         "A solution finishing with exit code 0 (without exceeding time or "
         "memory limits) and a judge finishing with exit code other than 0 "
         "would be interpreted as a Wrong Answer in the system."
     )
+    exit(1)
 else:
     print(
         "A solution and judge both finishing with exit code 0 (without "

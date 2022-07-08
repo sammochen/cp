@@ -1,8 +1,9 @@
-VLL zf(string s) {
-    ll n = s.length();
+// Returns the length of the longest prefix starting at i
+VLL zf(const string& s) {
+    const ll n = s.size();
     VLL z(n);
     ll l = 0, r = 0;
-    REP(i, 1, n) {
+    rep(i, 1, n) {
         // if within the bound, update the z value
         if (i <= r) {
             z[i] = min(r - i + 1, z[i - l]);

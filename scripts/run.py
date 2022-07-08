@@ -14,7 +14,7 @@ def get_args():
     parser.add_argument("-q", "--quiet", action="store_true")
     parser.add_argument("--fast", action="store_true")
     parser.add_argument("-ia", "--interactive", action="store_true")
-    parser.add_argument("-j", "--judge", action="store_true")
+    parser.add_argument("-j", "--judge", nargs="?", const=1, default=0)
     parser.add_argument("-t", "--time", action="store_true")
     return parser.parse_args()
 
@@ -26,7 +26,7 @@ def compile(args):
     if args.fast:
         flags.append("-O3")
 
-    compile_cmd = f"g++ --std=c++17 -fsanitize=address -O2 {' '.join(flags)} main.cpp -o {BINARY_NAME}"
+    compile_cmd = f"g++ --std=c++20 -fsanitize=address -O2 {' '.join(flags)} main.cpp -o {BINARY_NAME}"
     return os.system(compile_cmd)
 
 
@@ -57,16 +57,17 @@ def run(args):
 
         # Write to terminal
         print(f">>>>> running {input_file}")
-        start_time = time()
         os.system(f"./{BINARY_NAME} < {input_file}")
+
+        # Write stdout to file
+        actual_file = input_file.replace(".in", ".actual")
+
+        start_time = time()
+        os.system(f"./{BINARY_NAME} < {input_file} > {actual_file} 2> /dev/null")
         end_time = time()
 
         if args.time:
             print(f">>>>> time: {end_time - start_time:.4f}s")
-
-        # Write stdout to file
-        actual_file = input_file.replace(".in", ".actual")
-        os.system(f"./{BINARY_NAME} < {input_file} > {actual_file} 2> /dev/null")
 
         expected_file = input_file.replace(".in", ".expected")
         if not is_empty(expected_file):
@@ -93,9 +94,12 @@ if __name__ == "__main__":
         print(">>>>> Interactive mode:")
         os.system(f"./{BINARY_NAME}")
     elif args.judge:
-        print(">>>>> Running against judge:")
-        os.system(
-            "python3 interactive/runner.py python3 interactive/judge.py 0 -- ./program"
-        )
+        print(f">>>>> Running against judge {args.judge} times:")
+        for _ in range(int(args.judge)):
+            ret = os.system(
+                "python3 interactive/runner.py python3 interactive/judge.py 0 -- ./program"
+            )
+            if ret != 0:
+                break
     else:
         run(args)
