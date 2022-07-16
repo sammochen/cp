@@ -29,25 +29,26 @@ def is_prime(x):
 
 
 def testcase():
-    x = random.randint(2, 100)
-    print_err(x)
+    n = 1000
+    print_flush(n)
+    s = "".join("T" if random.randint(1, 2) == 1 else "F" for _ in range(n))
 
-    for q in range(20):
-        s = input()
-        if s == "composite":
-            assert not is_prime(x), "Wrong guess"
-            return
-        elif s == "prime":
-            assert is_prime(x), "Wrong guess"
-            return
-        else:
-            y = int(s)
-            if x % y == 0:
-                print_flush("yes")
-            else:
-                print_flush("no")
+    for _ in range(675):
+        Q = input().strip()
+        assert len(Q) == len(s) == n, "invalid query size"
 
-    assert False, "Used 20 guesses"
+        correct = 0
+        for i in range(n):
+            if Q[i] == s[i]:
+                correct += 1
+
+        print_err(Q, s, correct)
+        print_flush(correct)
+
+        if correct == n:
+            return
+
+    assert False, "Too many queries"
 
 
 def judge():
