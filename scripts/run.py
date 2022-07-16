@@ -18,6 +18,7 @@ def compile(args):
     flags = [
         "--std=c++20",
         "-Wall",
+        "-Wno-unused-variable",
         "-Wno-unused-const-variable",
         "-fsanitize=address",
         "-DDEBUG",
@@ -56,6 +57,7 @@ def run(args):
         expected_file = input_file.replace(".in", ".expected")
 
         # Write to output :)
+        print(f">>>>> {input_file}")
         run_code = os.system(f"./program < {input_file}")
 
         if run_code != 0:
