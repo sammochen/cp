@@ -25,6 +25,8 @@ ll distPar(ll i, ll j) {
     // return dist knowing that isPar(i, j)
     assert(isPar(i, j));
 
+    if (i == j) return 0;
+
     // try raise j as high as possible
     ll ans = 0;
     rrep(d, k - 1, 0) {

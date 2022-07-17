@@ -1,7 +1,6 @@
 import argparse
 import glob
 import os
-from time import time
 
 
 def get_args():
@@ -55,10 +54,19 @@ def run(args):
 
         actual_file = input_file.replace(".in", ".actual")
         expected_file = input_file.replace(".in", ".expected")
+        tmp_file = input_file.replace(".in", ".tmp")
 
-        # Write to output :)
+        # Write to temp file and re-output, catch seg fault
         print(f">>>>> {input_file}")
-        run_code = os.system(f"./program < {input_file}")
+        run_code = os.system(f"./program < {input_file} &> {tmp_file}")
+
+        # Going to hack this: if line contains `AddressSanitizer` chop the rest off
+        with open(tmp_file) as f:
+            lines = f.readlines()
+            for line in lines:
+                if "AddressSanitizer" in line:
+                    break
+                print(line, end="")
 
         if run_code != 0:
             print(">>>>> 😬 RTE")
