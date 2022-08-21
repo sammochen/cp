@@ -2,6 +2,10 @@
 struct XIO {
     static char temp[5'000'005];
     // in
+    XIO& operator>>(int& x) {
+        scanf("%d", &x);
+        return *this;
+    }
     XIO& operator>>(ll& x) {
         scanf("%lld", &x);
         return *this;
@@ -17,6 +21,10 @@ struct XIO {
     }
 
     // out
+    XIO& operator<<(const int& x) {
+        printf("%d", x);
+        return *this;
+    }
     XIO& operator<<(const ll& x) {
         printf("%lld", x);
         return *this;

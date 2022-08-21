@@ -1,29 +1,44 @@
-// bit vector
-template <int Base>
-struct Bitstate {
-    ll repr = 0;
-    mutable vector<ll> pows;
 
-    Bitstate() {
-        pows.assign(30, -1);
-        pows[0] = 1;
+template <typename WIDTH>
+struct bitstate {
+    constexpr PER_LL = 62 / WIDTH;
+    VLL data;  // underlying data
+
+    void resize(ll n) {
+        data.resize(rup(n, PER_LL));
     }
 
-    ll base_pow(ll ind) const {
-        return (pows[ind] == -1) ? pows[ind] = base_pow(ind - 1) * Base : pows[ind];
-    }
-
-    void set(ll ind, ll val) {
-        repr += (val - get(ind)) * base_pow(ind);
+    pair<int, int> getInd(ll ind) const {
+        ll i = ind / PER_LL, j = ind % PER_LL;
+        return {i, j};
+        ll num = data[i];
+        // get the j'th area
     }
 
     ll get(ll ind) const {
-        return (repr / base_pow(ind)) % Base;
+        auto [i, j] = getInd(ind);
+        ll& num = data[i];
+        return (num >> (WIDTH * j)) % tp(WIDTH);
     }
 
-    vector<ll> to_vector(ll n) const {
-        vector<ll> ans(n);
-        for (ll i = 0; i < n; i++) ans[i] = get(i);
-        return ans;
+    void setbit(ll i, ll j, ll v) {
+        if (v) {
+            num |= tp(j);
+        } else {
+            num &= ~tp(j);
+        }
+    }
+
+    void set(ll ind, ll value) {
+        auto [i, j] = getInd(ind);
+        auto& num = data[i];
+
+        rep(bit, 0, WIDTH) {
+            if (tp(bit) & value) {
+                num |= tp(j * WIDTH + bit);
+            } else {
+                num &= ~tp(j * WIDTH + bit);
+            }
+        }
     }
 };

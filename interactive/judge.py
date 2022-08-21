@@ -29,24 +29,21 @@ def is_prime(x):
 
 
 def testcase():
-    n = 1000
+    n = random.randint(500, 1000)
+
     print_flush(n)
-    s = "".join("T" if random.randint(1, 2) == 1 else "F" for _ in range(n))
+    x = random.randint(1, n - 1)
 
-    for _ in range(675):
-        Q = input().strip()
-        assert len(Q) == len(s) == n, "invalid query size"
+    for _ in range(11):
+        Q = input().strip().split()
+        y = int(Q[1])
 
-        correct = 0
-        for i in range(n):
-            if Q[i] == s[i]:
-                correct += 1
-
-        print_err(Q, s, correct)
-        print_flush(correct)
-
-        if correct == n:
+        if Q[0] == "!":
+            assert x == y, f"Wrong guess: {x=} {y=}"
             return
+
+        x += y
+        print_flush(x // n)
 
     assert False, "Too many queries"
 

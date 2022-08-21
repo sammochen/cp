@@ -1,6 +1,11 @@
 #include <bits/stdc++.h>
-
 using namespace std;
+
+#ifdef DEBUG
+#include "debug.h"
+#else
+#define debug(...) 1
+#endif
 
 using ll = long long;
 using db = long double;
@@ -27,51 +32,21 @@ using SS = stringstream;
 #define mset multiset
 
 // clang-format off
-// --------------------------------- DEBUG ---------------------------------
-namespace Debug {
-const string open = "[", sep = ", ", close = "]";
-struct Second {}; struct First : Second {};
-
-template <typename T>
-auto one(T t, First) -> decltype(cerr << t, string()) { stringstream ss; ss << t; return ss.str(); }
-template <typename T>
-auto one(T t, Second) -> decltype(t.first, t.second, string()) { return open + one(t.first, First()) + ", " + one(t.second, First()) + close; }
-template <typename T>
-auto one(T t, Second) -> decltype(t.begin(), t.end(), string() ) { string ans = open; for (auto a : t) { ans += (ans == open ? "" : sep) + one(a, First()); } return ans + close; }
-
-string mult() { return ""; }
-template <typename A, typename... B>
-string mult(A a, B... b) { return one(a, First()) + " " + mult(b...); }
-}  // namespace Debug
-#ifdef DEBUG
-#define debug(...) do { cerr << Debug::mult("[" + string(#__VA_ARGS__) + "]:", __VA_ARGS__) << endl; } while (false)
-#else
-#define debug(...) do {} while (false)
-#endif
-// --------------------------------- DEBUG ---------------------------------
 
 ll ob(ll i, ll n) { return i < 0 || i >= n; }
 ll tp(ll x) { return ( 1LL << x ); }
 ll rup(ll a, ll b) { return a % b ? a/b + 1 : a/b; }
 ll sign(ll x) {	return x == 0 ? 0 : x / abs(x); }
-VS ssplit(string s) { VS ans; SS ss(s); while (ss >> s) { ans.push_back(s); } return ans; }
-
 void makemod(ll& x, ll m) { x %= m; if (x < 0) { x += m; } }
 ll getmod(ll x, ll m) { makemod(x, m); return x; }
-void addmod(ll &a, ll b, ll m) { a += b; if (a >= m) a -= m; }
 ll powmod(ll a, ll b, ll m) { if (b == 0) return 1; ll h = powmod(a, b/2, m); ll ans = h*h%m; return b%2 ? ans*a%m : ans; }
 ll invmod(ll a, ll m) { return powmod(a, m - 2, m); }
 
-template <typename A, typename B> bool upmin(A& x, B v) { if (v >= x) return false; x = v; return true; }
-template <typename A, typename B> bool upmax(A& x, B v) { if (v <= x) return false; x = v; return true; }
-
-const VLL di = {0, 0, 1, -1, 1, -1, 1, -1};
-const VLL dj = {1, -1, 0, 0, -1, -1, 1, 1};
-const VLL mods = {1'000'000'007, 998'244'353, 1'000'000'207, 1'000'003};
-const ll mod = mods[0];
-const ll inf = (ll)1e18 + 5;
-const db eps = 1e-10;
-const db pi = acos(0) * 2;
-mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+template <typename A, typename B> bool upmin(A& x, B v) { if (v >= x) return false; return x = v, true; }
+template <typename A, typename B> bool upmax(A& x, B v) { if (v <= x) return false; return x = v, true; }
 
 // clang-format on
+
+const VLL di = {0, 0, 1, -1, 1, -1, 1, -1}, dj = {1, -1, 0, 0, -1, -1, 1, 1};
+const ll mod = 1'000'000'007, mod2 = 998'244'353, inf = (ll)1e18 + 5;
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
