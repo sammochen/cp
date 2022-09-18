@@ -46,7 +46,7 @@ def read_output(filename):
 
 
 def run(args):
-    input_files = args.input if args.input else glob.glob("*.in")
+    input_files = args.input if args.input else glob.glob("io/*.in")
     input_files.sort()
     for input_file in input_files:
         if is_empty(input_file):

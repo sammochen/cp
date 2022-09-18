@@ -28,7 +28,7 @@ def clear_files():
     os.system("rm *.actual 2> /dev/null")
 
     # Clear .in and .expected
-    cases = glob.glob("*.in") + glob.glob("*.expected")
+    cases = glob.glob("io/*.in") + glob.glob("io/*.expected")
     for input_file in cases:
         os.system(f"> {input_file}")
 
