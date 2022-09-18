@@ -2,6 +2,3 @@
 .vscode
 program
 *.class
-*.in
-*.expected
-*.actual
