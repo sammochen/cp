@@ -1,6 +1,7 @@
 import argparse
 import glob
 import os
+import re
 
 from utils.utils import read_output, is_empty
 
@@ -74,11 +75,62 @@ def run(args):
         run_one_file(input_file)
 
 
+def create_leetcode_main():
+    with open("leetcode/fake.cpp") as f:
+        code_lines = f.readlines()
+        decs = [line for line in code_lines if "// dec" in line]
+        if len(decs) != 1:
+            print("Error: // dec does not exist in leetcode/fake.cpp")
+            exit(1)
+        dec_line = decs[0]
+
+    # Clean dec_line
+    dec_line_stripped = [s for s in re.split(r"[\(\), ]", dec_line) if len(s)]
+    brace_index = dec_line_stripped.index("{")
+    dec_line_stripped = dec_line_stripped[:brace_index]
+
+    ret_type = dec_line_stripped[0]
+    method_name = dec_line_stripped[1]
+    args = []
+    for i in range(2, len(dec_line_stripped), 2):
+        arg_type = dec_line_stripped[i]
+        arg_name = dec_line_stripped[i + 1]
+        arg_type = arg_type.replace("const", "").replace("&", "")
+        args.append((arg_type, arg_name))
+
+    with open("leetcode/template.cpp") as f:
+        template_lines = f.readlines()
+
+    main_lines = []
+    for line in template_lines:
+        if "// code here" in line:
+            main_lines += code_lines
+        elif "// args here" in line:
+            main_lines.append("Solution sol;\n")
+            for arg_type, arg_name in args:
+                main_lines.append(" " * 8 + f"{arg_type} {arg_name};\n")
+                main_lines.append(" " * 8 + f"IO::parse(lines[ind++], {arg_name});\n")
+            main_lines.append(
+                " " * 8
+                + f"{ret_type} ans = sol.{method_name}({', '.join([a[1] for a in args])});\n"
+            )
+            main_lines.append(" " * 8 + f"cout << IO::dump(ans) << endl;\n")
+        else:
+            main_lines.append(line)
+
+    with open("main.cpp", "w") as f:
+        for line in main_lines:
+            f.write(line)
+
+
 def main():
     os.environ["MallocNanoZone"] = "0"  # Mac bug: nano zone abandoned
     os.system(f"rm program 2> /dev/null")  # Remove previous code
 
     args = get_args()
+
+    if args.leetcode:
+        create_leetcode_main()
 
     if compile(args) != 0:
         exit(1)
