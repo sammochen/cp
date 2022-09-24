@@ -3,14 +3,14 @@ import glob
 import os
 import re
 
-from utils.utils import read_output, is_empty
+from utils.utils import is_empty, compare_answer
 
 
 def get_args():
     parser = argparse.ArgumentParser(description="run.py")
     parser.add_argument("-i", "--input", nargs="+")
     parser.add_argument("-c", "--compile-only", action="store_true")
-    parser.add_argument("--quiet", action="store_true")
+    parser.add_argument("-q", "--quiet", action="store_true")
     parser.add_argument("-ia", "--interactive", action="store_true")
     parser.add_argument("-j", "--judge", nargs="?", const=1, default=0)
     parser.add_argument("-lc", "--leetcode", action="store_true")
@@ -24,8 +24,10 @@ def compile(args):
         "-Wno-unused-variable",
         "-Wno-unused-const-variable",
         "-fsanitize=address",
-        "-DDEBUG",
     ]
+    if not args.quiet:
+        flags.append("-DDEBUG")
+        flags.append("-O2")
 
     cmd = f"g++ {' '.join(flags)} main.cpp -o program"
     return os.system(cmd)
@@ -60,12 +62,8 @@ def run_one_file(input_file):
     run_code = os.system(f"./program < {input_file} > {actual_file} 2> /dev/null")
 
     if not is_empty(expected_file):
-        actual = read_output(actual_file)
-        expected = read_output(expected_file)
-        if actual == expected:
-            print(">>>>> ✅ AC")
-        else:
-            print(">>>>> 😥 WA")
+        verdict = compare_answer(actual_file, expected_file)
+        print(f">>>>> {verdict}")
 
 
 def run(args):
