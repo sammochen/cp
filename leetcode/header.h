@@ -35,16 +35,26 @@ void eatWhitespace(string& s) {
 }
 }  // namespace util
 
-void parse(std::string& s, int& x) {
+void parse(std::string& s, long long& x) {
     string t = util::parseWhile(s, [](char c) {
         return (c >= '0' && c <= '9') || (c == '+') || (c == '-');
     });
     assert(t.size());
-    x = stoi(t);
+    x = stoll(t);
 }
 
-string dump(int& x) {
+string dump(const long long& x) {
     return to_string(x);
+}
+
+string dump(const int& x) {
+    return to_string(x);
+}
+
+void parse(std::string& s, int& x) {
+    long long xx;
+    parse(s, xx);
+    x = xx;
 }
 
 void parse(std::string& s, string& x) {
@@ -59,7 +69,7 @@ void parse(std::string& s, string& x) {
     s.pop_back();
 }
 
-string dump(string& x) {
+string dump(const string& x) {
     return "\"" + x + "\"";
 }
 
@@ -70,7 +80,7 @@ void parse(std::string& s, char& x) {
     x = temp[0];
 }
 
-string dump(char& x) {
+string dump(const char& x) {
     return string(1, x);
 }
 
@@ -83,12 +93,12 @@ void parse(std::string& s, vector<T>& x) {
     s.pop_back();
 
     while (1) {
-        eatWhitespace(s);
+        IO::util::eatWhitespace(s);
 
         x.emplace_back();
         parse(s, x.back());
 
-        eatWhitespace(s);
+        IO::util::eatWhitespace(s);
 
         if (s.back() == ',') {
             s.pop_back();
@@ -102,7 +112,7 @@ void parse(std::string& s, vector<T>& x) {
 }
 
 template <typename T>
-string dump(vector<T>& x) {
+string dump(const vector<T>& x) {
     string s;
     s += "[";
     int first = 1;
@@ -127,7 +137,7 @@ void parse(std::string& s, ListNode*& x) {
     x = sentinel->next;
 }
 
-string dump(ListNode*& x) {
+string dump(const ListNode*& x) {
     vector<int> A;
     while (x) {
         A.push_back(x->val);

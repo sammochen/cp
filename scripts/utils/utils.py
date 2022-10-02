@@ -5,7 +5,7 @@ def is_empty(filename: str):
     return len(x) == 0
 
 
-def compare_answer(actual, expected, rstrip=False):
+def compare_answer(actual, expected, rstrip=True):
     def get_lines(name):
         with open(name) as f:
             lines = f.readlines()

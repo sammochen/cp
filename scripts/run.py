@@ -27,7 +27,7 @@ def compile(args):
     ]
     if not args.quiet:
         flags.append("-DDEBUG")
-        flags.append("-O2")
+        # flags.append("-O2")
 
     cmd = f"g++ {' '.join(flags)} main.cpp -o program"
     return os.system(cmd)
