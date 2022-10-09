@@ -40,7 +40,7 @@ def run_one_file(input_file):
     print(f">>>>> {input_file}")
 
     actual_file = input_file.replace(".in", ".actual")
-    expected_file = input_file.replace(".in", ".expected")
+    expected_file = input_file.replace(".in", ".ex")
     tmp_file = input_file.replace(".in", ".tmp")
 
     # Write to temp file and re-output, catch seg fault

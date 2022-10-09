@@ -1,17 +1,15 @@
-
 struct DinicEdge {
     ll from, to, cap;
     DinicEdge() : from(0), to(0), cap(0) {}
     DinicEdge(ll a, ll b, ll c) : from(a), to(b), cap(c) {}
 };
 
-// NOTE: To find the resulting flow values, look at the reverse edges's cap
 struct Dinic {
     const ll n, source, sink;
     vector<DinicEdge> edges;  // edge list
     VVLL E;                   // adj list
 
-    Dinic(ll n) : n(n), E(n), source(n - 1), sink(n - 2) {}
+    Dinic(ll n) : n(n), source(n - 1), sink(n - 2), E(n) {}
 
     // Adds an edge from u to v with cap
     void addEdge(ll u, ll v, ll cap) {
@@ -98,5 +96,22 @@ struct Dinic {
             ans += (dfs(source, inf, dfsPointer, level));
         };
         return ans;
+    }
+
+    // NOTE: To find the resulting flow values, look at the reverse edges's cap
+    vector<DinicEdge> critEdges() {
+        vector<DinicEdge> res;
+        ll m = edges.size();
+        rep(i, 0, m) {
+            if (i % 2 == 1) continue;
+            auto& edge = edges[i];
+            if (edge.from == source || edge.to == source) continue;
+            if (edge.from == sink || edge.to == sink) continue;
+
+            if (edges[i].cap == 0 && edges[i ^ 1].cap == 1) {  // cap == 1!!
+                res.push_back(edge);
+            }
+        }
+        return res;
     }
 };

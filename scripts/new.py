@@ -22,7 +22,7 @@ def clear_files():
     cases = 4
     for i in range(1, cases + 1):
         os.system(f"> io/{i}.in")
-        os.system(f"> io/{i}.expected")
+        os.system(f"> io/{i}.ex")
         os.system(f"> io/{i}.actual")
         os.system(f"> io/{i}.tmp")
 
