@@ -24,6 +24,7 @@ void solve(const vector<vector<PLL>>& E, const ll s) {
         const ll dist = t.first;
         const ll at = t.second;
         if (d[at] < dist) continue;
+        // unpacking - we are promised that dist is the best distance
 
         for (const auto& edge : E[at]) {
             const ll to = edge.first;

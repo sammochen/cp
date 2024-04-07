@@ -1,23 +1,36 @@
+
 struct tnode {
-    vector<tnode *> children;
-    int isEnd = 0;
+    vector<unique_ptr<tnode>> children;
+    set<PLL> inds;
 
     tnode() {
         children.resize(26);
-        isEnd = 0;
     }
 };
 
-void insert(tnode *root, const string &key) {
-    tnode *cur = root;
-    for (int i = 0; i < key.size(); i++) {
-        int index = key[i] - 'A';
-        if (!cur->children[index]) {
-            cur->children[index] = new tnode();
-        }
-        cur = cur->children[index];
-    }
+void insert(tnode* root, const string& key, ll ind) {
+    PLL p = {(ll)key.size(), ind};
 
-    // mark last node as leaf
-    cur->isEnd = 1;
+    tnode* cur = root;
+    cur->inds.insert(p);
+    for (int i = 0; i < key.size(); i++) {
+        int index = key[i] - 'a';
+        if (!cur->children[index]) {
+            cur->children[index] = make_unique<tnode>();
+        }
+        cur = cur->children[index].get();
+        cur->inds.insert(p);
+    }
+}
+
+ll query(tnode* root, const string& key) {
+    tnode* cur = root;
+    for (int i = 0; i < key.size(); i++) {
+        int index = key[i] - 'a';
+        if (!cur->children[index]) {
+            return cur->inds.begin()->second;
+        }
+        cur = cur->children[index].get();
+    }
+    return cur->inds.begin()->second;
 }

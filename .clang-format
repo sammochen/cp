@@ -5,5 +5,5 @@ TabWidth: 4
 UseTab: Never
 AllowShortFunctionsOnASingleLine: Empty
 AllowShortLambdasOnASingleLine: Empty
-ColumnLimit: 100
+ColumnLimit: 150
 AccessModifierOffset: -4

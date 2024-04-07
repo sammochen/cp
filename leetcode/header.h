@@ -57,6 +57,21 @@ void parse(std::string& s, int& x) {
     x = xx;
 }
 
+string dump(const bool& x) {
+    if (x)
+        return "true";
+    else
+        return "false";
+}
+
+void parse(std::string& s, bool& x) {
+    if (s == "true")
+        x = true;
+    else if (s == "false")
+        x = false;
+    assert(false);
+}
+
 void parse(std::string& s, string& x) {
     assert(s.back() == '"');
     s.pop_back();
@@ -91,6 +106,12 @@ void parse(std::string& s, vector<T>& x) {
 
     assert(s.back() == '[');
     s.pop_back();
+    IO::util::eatWhitespace(s);
+
+    if (s.back() == ']') {
+        s.pop_back();
+        return;
+    }
 
     while (1) {
         IO::util::eatWhitespace(s);

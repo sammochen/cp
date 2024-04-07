@@ -1,14 +1,15 @@
 
+using ll = long long;
 ll inf = 1e18;
 
 // Returns the index of the next smallest element
-vector<int> nextSmallest(vector<int>& A) {
-    int n = A.size();
-    vector<pair<int, int>> st;
+vector<ll> nextSmallest(vector<ll>& A) {
+    ll n = A.size();
+    vector<pair<ll, ll>> st;
     st.push_back({-inf, n});
 
-    vector<int> ans(n, -1);
-    for (int i = n - 1; i >= 0; i--) {
+    vector<ll> ans(n, -1);
+    for (ll i = n - 1; i >= 0; i--) {
         while (A[i] <= st.back().first) {
             st.pop_back();
         }
@@ -19,13 +20,13 @@ vector<int> nextSmallest(vector<int>& A) {
     return ans;
 }
 
-vector<int> prevSmallest(vector<int>& A) {
-    int n = A.size();
-    vector<pair<int, int>> st;
+vector<ll> prevSmallest(vector<ll>& A) {
+    ll n = A.size();
+    vector<pair<ll, ll>> st;
     st.push_back({-inf, -1});
 
-    vector<int> ans(n, -1);
-    for (int i = 0; i < n; i++) {
+    vector<ll> ans(n, -1);
+    for (ll i = 0; i < n; i++) {
         while (A[i] <= st.back().first) {
             st.pop_back();
         }

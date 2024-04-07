@@ -19,17 +19,19 @@ def get_args():
 
 def compile(args):
     flags = [
-        "--std=c++20",
+        "--std=c++17",
         "-Wall",
         "-Wno-unused-variable",
         "-Wno-unused-const-variable",
         "-fsanitize=address",
+        "-O3",
     ]
     if not args.quiet:
         flags.append("-DDEBUG")
         # flags.append("-O2")
 
     cmd = f"g++ {' '.join(flags)} main.cpp -o program"
+    print(f"running <{cmd}>...")
     return os.system(cmd)
 
 
@@ -76,11 +78,12 @@ def run(args):
 def create_leetcode_main():
     with open("leetcode/fake.cpp") as f:
         code_lines = f.readlines()
-        decs = [line for line in code_lines if "// dec" in line]
+        decs = [line for line in code_lines if "// !" in line]
         if len(decs) != 1:
-            print("Error: // dec does not exist in leetcode/fake.cpp")
+            print("Error: // ! does not exist in leetcode/fake.cpp")
             exit(1)
-        dec_line = decs[0]
+
+    dec_line = decs[0].replace("const", " ").replace("&", " ")
 
     # Clean dec_line
     dec_line_stripped = [s for s in re.split(r"[\(\), ]", dec_line) if len(s)]

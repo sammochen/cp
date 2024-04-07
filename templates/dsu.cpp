@@ -6,7 +6,7 @@ struct DSU {
 
     DSU(ll n) : n(n), numComponents(n) {
         par.resize(n);
-        iota(all(par), 0);
+        iota(par.begin(), par.end(), 0);
 
         sz.assign(n, 0);
     }

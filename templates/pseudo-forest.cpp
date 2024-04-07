@@ -46,9 +46,9 @@ PLL dfs(ll at) {
     return ans;
 }
 
-void solve(VLL A) {
-    child = A;
-    n = A.size();
+void solve(const VLL& tempChild) {
+    child = tempChild;
+    n = tempChild.size();
 
     reset();
     rep(i, 0, n) dfs(i);
