@@ -1,3 +1,4 @@
+// longest matching prefix
 VLL kmp(const string& s) {
     ll n = s.length();
     VLL k(n);

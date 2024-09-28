@@ -1,17 +1,28 @@
-def is_empty(filename: str):
+from typing import Optional
+
+
+def is_empty(filename: str) -> bool:
     # Check if the input_file is empty
     with open(filename) as f:
         x = f.read().strip()
     return len(x) == 0
 
 
-def compare_answer(actual, expected, rstrip=True):
+def compare_answer(actual: str, expected: str, rstrip=True) -> str:
     def get_lines(name):
         with open(name) as f:
             lines = f.readlines()
-        if rstrip:
-            for i in range(len(lines)):
-                lines[i] = lines[i].rstrip()
+
+        def preprocess_line(line: str) -> Optional[str]:
+            # Personal hack - if the line starts with ![ then we ignore it
+            if line.startswith("--["):
+                return None
+            if rstrip:
+                return line.rstrip()
+            return line
+
+        lines = [preprocess_line(line) for line in lines]
+        lines = [line for line in lines if line is not None]
 
         return lines
 

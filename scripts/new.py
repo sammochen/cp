@@ -5,7 +5,7 @@ import os
 def get_args():
     parser = argparse.ArgumentParser(description="new.py")
     parser.add_argument("-g", "--google", action="store_true")
-    parser.add_argument("-k", "--keep", action="store_true")
+    parser.add_argument("-rm", "--remove", action="store_true")
     return parser.parse_args()
 
 
@@ -29,7 +29,7 @@ def clear_files():
 
 def reset(args):
     build_main(args)
-    if not args.keep:
+    if args.remove:
         clear_files()
 
 

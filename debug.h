@@ -35,7 +35,8 @@ string mult(A a, B... b) {
 }
 }  // namespace Debug
 
-#define debug(...)                                                                   \
-    do {                                                                             \
-        cerr << Debug::mult("[" + string(#__VA_ARGS__) + "]:", __VA_ARGS__) << endl; \
+// NOTE the python scripts depend on --[ being an unique ideentifier for debug logs
+#define debug(...)                                                                     \
+    do {                                                                               \
+        cout << Debug::mult("--[" + string(#__VA_ARGS__) + "]:", __VA_ARGS__) << endl; \
     } while (false)

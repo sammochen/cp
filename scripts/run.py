@@ -17,7 +17,7 @@ def get_args():
     return parser.parse_args()
 
 
-def compile(args):
+def compile(args) -> int:
     flags = [
         "--std=c++17",
         "-Wall",
@@ -28,14 +28,13 @@ def compile(args):
     ]
     if not args.quiet:
         flags.append("-DDEBUG")
-        # flags.append("-O2")
 
     cmd = f"g++ {' '.join(flags)} main.cpp -o program"
     print(f"running <{cmd}>...")
     return os.system(cmd)
 
 
-def run_one_file(input_file):
+def run_one_file(input_file: str):
     if is_empty(input_file):
         return
 
@@ -43,25 +42,19 @@ def run_one_file(input_file):
 
     actual_file = input_file.replace(".in", ".actual")
     expected_file = input_file.replace(".in", ".ex")
-    tmp_file = input_file.replace(".in", ".tmp")
 
     # Write to temp file and re-output, catch seg fault
-    run_code = os.system(f"./program < {input_file} &> {tmp_file}")
+    run_code = os.system(f"./program < {input_file} > {actual_file} 2> /dev/null")
 
     # Going to hack this: if line contains `AddressSanitizer` chop the rest off
-    with open(tmp_file) as f:
+    with open(actual_file) as f:
         lines = f.readlines()
         for line in lines:
-            if "AddressSanitizer" in line:
-                break
             print(line, end="")
 
     if run_code != 0:
         print(">>>>> 😬 RTE")
         return
-
-    # Write to file
-    run_code = os.system(f"./program < {input_file} > {actual_file} 2> /dev/null")
 
     if not is_empty(expected_file):
         verdict = compare_answer(actual_file, expected_file)
@@ -83,7 +76,9 @@ def create_leetcode_main():
             print("Error: // ! does not exist in leetcode/fake.cpp")
             exit(1)
 
-    dec_line = decs[0].replace("const", " ").replace("&", " ")
+    dec_line = (
+        decs[0].replace("const", " ").replace("&", " ").replace("long long", "ll")
+    )
 
     # Clean dec_line
     dec_line_stripped = [s for s in re.split(r"[\(\), ]", dec_line) if len(s)]
@@ -107,6 +102,14 @@ def create_leetcode_main():
         if "// code here" in line:
             main_lines += code_lines
         elif "// args here" in line:
+            # First check the count of args
+            main_lines.append(
+                f"""
+                if (lines.size() % {len(args)} != 0) 
+                {{ std::cout << "wrong number of arguments" << std::endl; exit(1);}}\n
+                """
+            )
+
             main_lines.append("Solution sol;\n")
             for arg_type, arg_name in args:
                 main_lines.append(" " * 8 + f"{arg_type} {arg_name};\n")

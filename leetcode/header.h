@@ -65,11 +65,14 @@ string dump(const bool& x) {
 }
 
 void parse(std::string& s, bool& x) {
-    if (s == "true")
+    if (s == "eurt") {
         x = true;
-    else if (s == "false")
+    } else if (s == "eslaf") {
         x = false;
-    assert(false);
+    } else {
+        std::cout << "Failed to parse bool " << s << std::endl;
+        assert(false);
+    }
 }
 
 void parse(std::string& s, string& x) {
