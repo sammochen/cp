@@ -17,7 +17,10 @@ void init() {
 
 ll ncr(ll n, ll r) {
     init();
-    assert(n >= 0 && n < nax && r >= 0 && r <= n);
-    return F[n] * INVF[r] % mod * INVF[n - r] % mod;
+    if (n >= 0 && n < nax && r >= 0 && r <= n) {
+        return F[n] * INVF[r] % mod * INVF[n - r] % mod;
+    } else {
+        assert(false);
+    }
 }
 }  // namespace NCR

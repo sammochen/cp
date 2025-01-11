@@ -10,9 +10,7 @@ def get_args():
     parser = argparse.ArgumentParser(description="run.py")
     parser.add_argument("-i", "--input", nargs="+")
     parser.add_argument("-c", "--compile-only", action="store_true")
-    parser.add_argument("-q", "--quiet", action="store_true")
-    parser.add_argument("-ia", "--interactive", action="store_true")
-    parser.add_argument("-j", "--judge", nargs="?", const=1, default=0)
+    parser.add_argument("-q", "--quiet", action="store_true") # No debug statements
     parser.add_argument("-lc", "--leetcode", action="store_true")
     return parser.parse_args()
 
@@ -23,8 +21,8 @@ def compile(args) -> int:
         "-Wall",
         "-Wno-unused-variable",
         "-Wno-unused-const-variable",
-        "-fsanitize=address",
-        "-O3",
+        "-fsanitize=address,undefined",
+        # "-O3",
     ]
     if not args.quiet:
         flags.append("-DDEBUG")
@@ -44,9 +42,8 @@ def run_one_file(input_file: str):
     expected_file = input_file.replace(".in", ".ex")
 
     # Write to temp file and re-output, catch seg fault
-    run_code = os.system(f"./program < {input_file} > {actual_file} 2> /dev/null")
+    run_code = os.system(f"./program < {input_file} &> {actual_file}")
 
-    # Going to hack this: if line contains `AddressSanitizer` chop the rest off
     with open(actual_file) as f:
         lines = f.readlines()
         for line in lines:
@@ -56,6 +53,7 @@ def run_one_file(input_file: str):
         print(">>>>> 😬 RTE")
         return
 
+    # Compare against expected file if it is not empty
     if not is_empty(expected_file):
         verdict = compare_answer(actual_file, expected_file)
         print(f">>>>> {verdict}")
@@ -142,17 +140,6 @@ def main():
     if args.compile_only:
         print(">>>>> Successfully compiled.")
         exit()
-    elif args.interactive:
-        print(">>>>> Interactive mode:")
-        os.system(f"./program")
-    elif args.judge:
-        print(f">>>>> Running against judge {args.judge} times:")
-        for _ in range(int(args.judge)):
-            ret = os.system(
-                "python3 interactive/runner.py python3 interactive/judge.py 0 -- ./program"
-            )
-            if ret != 0:
-                break
     else:
         run(args)
 

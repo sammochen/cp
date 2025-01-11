@@ -19,10 +19,13 @@ struct DSU {
         return root(a) == root(b);
     }
 
-    void merge(ll a, ll b) {
-        if (same(a, b)) return;
+    ll merge(ll a, ll b) {
+        if (same(a, b)) {
+            return 0;
+        }
         sz[root(a)] += sz[root(b)];
         par[root(b)] = root(a);
         numComponents--;
+        return 1;
     }
 };

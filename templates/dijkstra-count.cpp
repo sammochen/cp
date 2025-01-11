@@ -1,6 +1,6 @@
 namespace DIJ {
 const ll inf = 1e18;
-vector<ll> dist;
+vector<ll> dist, cnt;  // dist, num ways to get there
 
 void solve(const vector<vector<PLL>>& E, const ll s) {
     const ll n = E.size();
@@ -10,10 +10,12 @@ void solve(const vector<vector<PLL>>& E, const ll s) {
 
     // init structures
     dist.assign(n, inf);
+    cnt.assign(n, -1);
     set<PLL> pq;  // dist, at
 
     // init s
     dist[s] = 0;
+    cnt[0] = 1;
     pq.insert({0, s});
     while (pq.size()) {
         const auto t = *pq.begin();
@@ -31,6 +33,10 @@ void solve(const vector<vector<PLL>>& E, const ll s) {
             if (curDist + weight < dist[to]) {
                 pq.insert({curDist + weight, to});
                 dist[to] = curDist + weight;
+                cnt[to] = cnt[at];
+            } else if (curDist + weight == dist[to]) {
+                cnt[to] += cnt[at];
+                // cnt[to] %= mod;
             }
         }
     }

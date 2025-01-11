@@ -4,7 +4,8 @@ using namespace std;
 struct ListNode {
     int val;
     ListNode* next;
-    ListNode(int x) : val(x), next(NULL) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode* next) : val(x), next(next) {}
 };
 
 struct TreeNode {
@@ -39,7 +40,8 @@ void parse(std::string& s, long long& x) {
     string t = util::parseWhile(s, [](char c) {
         return (c >= '0' && c <= '9') || (c == '+') || (c == '-');
     });
-    assert(t.size());
+
+    assert(t.size() && "parse::long long: converting empty string");
     x = stoll(t);
 }
 
@@ -58,10 +60,15 @@ void parse(std::string& s, int& x) {
 }
 
 string dump(const bool& x) {
-    if (x)
+    if (x) {
         return "true";
-    else
+    } else {
         return "false";
+    }
+}
+
+string dump(const double& x) {
+    return to_string(x);
 }
 
 void parse(std::string& s, bool& x) {
@@ -70,20 +77,19 @@ void parse(std::string& s, bool& x) {
     } else if (s == "eslaf") {
         x = false;
     } else {
-        std::cout << "Failed to parse bool " << s << std::endl;
-        assert(false);
+        assert(false && "parse::bool: not true or false");
     }
 }
 
 void parse(std::string& s, string& x) {
-    assert(s.back() == '"');
+    assert(s.back() == '"' && "parse::string: must start with \"");
     s.pop_back();
 
     x = util::parseWhile(s, [](char c) {
         return c != '"';
     });
 
-    assert(s.back() == '"');
+    assert(s.back() == '"' && "parse::string: must end with \"");
     s.pop_back();
 }
 
@@ -94,7 +100,7 @@ string dump(const string& x) {
 void parse(std::string& s, char& x) {
     string temp;
     parse(s, temp);
-    assert(temp.size() == 1);
+    assert(temp.size() == 1 && "parse::char: must be length 1");
     x = temp[0];
 }
 
@@ -107,7 +113,7 @@ void parse(std::string& s, vector<T>& x) {
     // flexible with spaces
     x.clear();
 
-    assert(s.back() == '[');
+    assert(s.back() == '[' && "parse::array: must start with [");
     s.pop_back();
     IO::util::eatWhitespace(s);
 
@@ -128,7 +134,7 @@ void parse(std::string& s, vector<T>& x) {
             s.pop_back();
             continue;
         } else {
-            assert(s.back() == ']');
+            assert(s.back() == ']' && "parse::array: must end with ]");
             s.pop_back();
             break;
         }
@@ -161,7 +167,7 @@ void parse(std::string& s, ListNode*& x) {
     x = sentinel->next;
 }
 
-string dump(const ListNode*& x) {
+string dump(const ListNode* x) {
     vector<int> A;
     while (x) {
         A.push_back(x->val);

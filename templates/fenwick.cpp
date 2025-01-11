@@ -6,12 +6,14 @@ struct BIT {
     BIT(ll n) : n(n), arr(n) {}
 
     void add(ll i, ll k) {
+        assert(i != 0);
         while (i < n) {
             arr[i] += k;
             i += lsb(i);
         }
     }
 
+    // Returns a running sum of [1, i]
     ll sum(ll i) const {
         ll total = 0;
         while (i > 0) {

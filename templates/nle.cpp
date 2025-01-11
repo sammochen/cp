@@ -6,11 +6,11 @@ ll inf = 1e18;
 vector<ll> nextSmallest(vector<ll>& A) {
     ll n = A.size();
     vector<pair<ll, ll>> st;
-    st.push_back({-inf, n});
+    st.push_back({-inf, n});  // ! CHANGE THIS
 
     vector<ll> ans(n, -1);
     for (ll i = n - 1; i >= 0; i--) {
-        while (A[i] <= st.back().first) {
+        while (A[i] <= st.back().first) {  // ! CHANGE THIS for inc/noninc
             st.pop_back();
         }
 
@@ -23,11 +23,11 @@ vector<ll> nextSmallest(vector<ll>& A) {
 vector<ll> prevSmallest(vector<ll>& A) {
     ll n = A.size();
     vector<pair<ll, ll>> st;
-    st.push_back({-inf, -1});
+    st.push_back({-inf, -1});  // ! CHANGE THIS
 
     vector<ll> ans(n, -1);
     for (ll i = 0; i < n; i++) {
-        while (A[i] <= st.back().first) {
+        while (A[i] <= st.back().first) {  // ! CHANGE THIS for inc/noninc
             st.pop_back();
         }
 

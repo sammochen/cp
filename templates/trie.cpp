@@ -6,6 +6,8 @@ struct tnode {
     }
 };
 
+using T = unique_ptr<tnode>;
+
 void insert(tnode* root, const string& key) {
     tnode* cur = root;
     for (int i = 0; i < key.size(); i++) {

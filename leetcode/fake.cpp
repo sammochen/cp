@@ -46,13 +46,11 @@ void inll(ll& x) { scanf("%lld", &x); }
 
 template <typename A, typename B> bool upmin(A& x, B v) { if (v >= x) return false; return x = v, true; }
 template <typename A, typename B> bool upmax(A& x, B v) { if (v <= x) return false; return x = v, true; }
+
 // clang-format on
 
 const VLL di = {0, 0, 1, -1, 1, -1, 1, -1}, dj = {1, -1, 0, 0, -1, -1, 1, 1};
-const ll inf = 1e18;
-const ll mod = 1e9 + 7;
+const ll inf = 1e18, mod = 1'000'000'007;
 const string vowels = "aeiou";
-ll isvowel(char c) {
-    c = tolower(c);
-    return vowels.find(c) != string::npos;
-}
+
+// sol here
