@@ -8,7 +8,7 @@ struct DSU {
         par.resize(n);
         iota(par.begin(), par.end(), 0);
 
-        sz.assign(n, 0);
+        sz.assign(n, 1);
     }
 
     ll root(ll x) {

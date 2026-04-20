@@ -19,7 +19,6 @@ def clear_files():
         os.system(f"> io/{i}.in")
         os.system(f"> io/{i}.ex")
         os.system(f"> io/{i}.actual")
-        os.system(f"> io/{i}.tmp")
 
 
 def reset(args):

@@ -21,7 +21,6 @@ using SS = stringstream;
 
 #define rep(x, l, u) for (ll x = l; x < u; x++)
 #define rrep(x, l, u) for (ll x = l; x >= u; x--)
-#define fe(x, a) for (auto x : a)
 #define all(x) x.begin(), x.end()
 #define rall(x) x.rbegin(), x.rend()
 #define mst(x, v) memset(x, v, sizeof(x))
