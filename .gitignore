@@ -3,3 +3,7 @@
 program
 *.class
 __pycache__
+
+
+# debug symboles
+*.dSYM/
